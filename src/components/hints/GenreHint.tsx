@@ -6,16 +6,28 @@ type Genre = {
 }
 
 type GenreHintProps = {
-    genres: Genre[];
-    hidden?: boolean;
-}
+  genres: Genre[];
+  hidden?: boolean;
+};
 
 const GenreHint: React.FC<GenreHintProps> = ({ genres, hidden }) => {
-    return (
-        <div>
-            <p>Genres: <span className={hidden ? 'invisible' : ''}>{genres.map(genre => genre.name).join(", ")}</span></p>
-        </div>
-    );
-}
+  return (
+    <div className="bg-gray-700 rounded-lg shadow-md p-2 m-1">
+      <p className="text-white font-bold ml-1">Genres:</p>
+      <div className="flex flex-wrap">
+        {genres.map((genre) => (
+          <span
+            key={genre.id}
+            className={`${
+              hidden ? "hidden" : ""
+            } text-sm font-semibold bg-gray-200 rounded-full px-2 py-1 mr-2 my-2`}
+          >
+            {genre.name}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default GenreHint;

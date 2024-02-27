@@ -54,22 +54,21 @@ function App() {
   return (
     <div className="flex flex-col justify-between min-h-screen bg-gray-800">
       <Header />
-      <div className="mx-auto">
+      <div className="mx-auto max-w-screen-md">
         {/* Loading */}
         {isLoading ? (
           <div>Loading...</div>
         ) : (
           <>
             {/* Game Over Modal */}
-            {gameOver && <GameOverModal isVisible={gameOver} onClose={resetGame} />}
-            {/* Render HintArea only if not game over */}
-            {!gameOver && (
-              <HintArea
-                movieData={movieData}
-                creditData={creditData}
-                numHints={numHints}
-              />
+            {gameOver && (
+              <GameOverModal isVisible={gameOver} onClose={resetGame} />
             )}
+            <HintArea
+              movieData={movieData}
+              creditData={creditData}
+              numHints={numHints}
+            />
             <SearchBar checkAnswer={checkAnswer} />
           </>
         )}
@@ -77,7 +76,6 @@ function App() {
       <Footer />
     </div>
   );
-  
 }
 
 export default App;
