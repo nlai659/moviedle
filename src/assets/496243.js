@@ -1,4 +1,4 @@
-{
+const movieDetails = {
     "adult": false,
     "backdrop_path": "/hiKmpZMGZsrkA3cdce8a7Dpos1j.jpg",
     "belongs_to_collection": null,
@@ -66,3 +66,5 @@
     "vote_average": 8.509,
     "vote_count": 17156
 }
+
+export default movieDetails;
