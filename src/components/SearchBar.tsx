@@ -8,6 +8,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
+    if (searchTerm === "") return;
     setSearchTerm("");
     e.preventDefault();
     
