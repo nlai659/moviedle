@@ -52,9 +52,9 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col justify-between min-h-screen bg-gray-800">
+    <div className="flex flex-col min-h-screen bg-gray-800">
       <Header />
-      <div className="mx-auto max-w-screen-md">
+      <div className="mx-auto max-w-screen-md flex-1">
         {/* Loading */}
         {isLoading ? (
           <div>Loading...</div>
@@ -69,13 +69,16 @@ function App() {
               creditData={creditData}
               numHints={numHints}
             />
-            <SearchBar checkAnswer={checkAnswer} />
           </>
         )}
       </div>
-      <Footer />
+      <div className="mx-auto max-w-screen-md w-full mt-auto">
+        <SearchBar checkAnswer={checkAnswer} />
+        <Footer />
+      </div>
     </div>
   );
+  
 }
 
 export default App;
