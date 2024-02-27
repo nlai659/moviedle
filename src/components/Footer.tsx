@@ -2,10 +2,10 @@ import React from 'react';
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-gray-200 py-4">
-            <div className="container mx-auto px-4">
+        <footer>
+            <div className="container mx-auto p-4">
                 <p className="text-center text-gray-600">
-                    This is the footer content.
+                    API provided by <a href="https://www.themoviedb.org/" className="underline">TMDB</a>
                 </p>
             </div>
         </footer>
