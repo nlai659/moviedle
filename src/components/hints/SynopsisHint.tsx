@@ -5,7 +5,7 @@ type SynopsisHintProps = {
 const SynopsisHint = ({synopsis}: SynopsisHintProps) => {
     return (
         <div>
-            <p>{synopsis}</p>
+            <p>Synopsis: {synopsis}</p>
         </div>
     )
 }

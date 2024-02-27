@@ -1,6 +1,10 @@
 import { useState } from "react";
 
-const SearchBar = () => {
+type SearchBarProps = {
+  checkAnswer: (answer: string) => void;
+};
+
+const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -8,6 +12,7 @@ const SearchBar = () => {
     e.preventDefault();
     
     // Check Correct Answer
+    checkAnswer(searchTerm);
 
     // Correct Answer Logic
 

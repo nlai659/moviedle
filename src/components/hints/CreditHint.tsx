@@ -1,16 +1,23 @@
+import React from 'react';
+
 type CreditHintProps = {
     name: string;
     character: string;
     profile_path: string;
+    hidden?: boolean;
 }
 
-const CreditHint = ({name, character, profile_path}: CreditHintProps) => {
+const CreditHint: React.FC<CreditHintProps> = ({
+  name,
+  character,
+  profile_path,
+  hidden,
+}: CreditHintProps) => {
     return (
         <div>
-            <p>{name} as {character}</p>
-            <img src={`https://image.tmdb.org/t/p/w500${profile_path}`} alt={name} />
+            <p> Crew Member: <span className={hidden ? 'invisible' : ''}> {name} </span> </p>
         </div>
     )
-}
+};
 
 export default CreditHint;

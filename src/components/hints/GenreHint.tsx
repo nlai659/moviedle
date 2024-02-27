@@ -1,18 +1,21 @@
-type genre = {
+import React from 'react';
+
+type Genre = {
     id: number;
     name: string;
 }
 
 type GenreHintProps = {
-    genres: genre[];
+    genres: Genre[];
+    hidden?: boolean;
 }
 
-const GenreHint = ({genres}: GenreHintProps) => {
+const GenreHint: React.FC<GenreHintProps> = ({ genres, hidden }) => {
     return (
         <div>
-            <p>Genres: {genres.map((genre) => genre.name).join(", ")}</p>
+            <p>Genres: <span className={hidden ? 'invisible' : ''}>{genres.map(genre => genre.name).join(", ")}</span></p>
         </div>
-    )
+    );
 }
 
 export default GenreHint;

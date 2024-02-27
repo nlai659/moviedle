@@ -1,12 +1,12 @@
 type DateHintProps = {
     date: string;
+    hidden?: boolean;
 }
 
-const DateHint = ({date}: DateHintProps) => {
+const DateHint = ({date, hidden}: DateHintProps) => {
     return (
         <div>
-            <p> Release Date: </p>
-            <p>{date}</p>
+            <p> Release Date: <span className={hidden ? 'invisible' : ''}> {date} </span> </p>
         </div>
     )
 }
