@@ -7,15 +7,10 @@ import GameOverModal from "./components/GameOverModal";
 import GuessNumber from "./components/GuessNumber";
 import { getRandomNumber, getRandomYear } from "./util/random";
 
-// Temp Data
-import tempMovieData from "./assets/496243";
-import tempCreditData from "./assets/credits";
-
 function App() {
   // Constants
   const NUM_HINTS = 5;
   const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
-  const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
   const API_URL = "https://api.themoviedb.org/3/";
 
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +54,6 @@ function App() {
       return;
     } else {
       setNumHints((prevNumHints) => prevNumHints + 1);
-      console.log("Incorrect Answer");
 
       // Out of Hints
       if (numHints > NUM_HINTS) {
@@ -82,7 +76,7 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-800">
       <Header />
-      <div className="mx-auto max-w-screen-md flex-1">
+      <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
         {/* Loading */}
         {isLoading ? (
           <div>Loading...</div>
@@ -90,7 +84,16 @@ function App() {
           <>
             {/* Game Over Modal */}
             {gameOver && (
-              <GameOverModal isVisible={gameOver} onModalClose={onModalClose} onRandomMovie={onRandomMovie} numHints={NUM_HINTS} numHintsUsed={numHints} movieName={movieName} posterPath={movieData.poster_path} />
+              <GameOverModal
+                isVisible={gameOver}
+                onModalClose={onModalClose}
+                onRandomMovie={onRandomMovie}
+                numHints={NUM_HINTS}
+                numHintsUsed={numHints}
+                movieName={movieName}
+                posterPath={movieData.poster_path}
+                imdb_id={movieData.imdb_id}
+              />
             )}
             <HintArea
               movieData={movieData}

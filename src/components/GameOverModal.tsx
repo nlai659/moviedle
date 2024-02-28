@@ -6,9 +6,10 @@ type GameOverModalProps = {
     numHintsUsed: number;
     movieName: string;
     posterPath: string;
+    imdb_id?: string;
 };
 
-const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, numHints, numHintsUsed, movieName, posterPath }: GameOverModalProps) => {
+const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, numHints, numHintsUsed, movieName, posterPath, imdb_id }: GameOverModalProps) => {
     const win = numHintsUsed-1 <= numHints;
 
     const modalContent = win ? (
@@ -24,7 +25,7 @@ const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, numHints, numHi
     return (
         <div className={`fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-            <div className="bg-gray-700 rounded-lg shadow-md p-8 max-w-md relative z-50">
+            <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50">
                 {modalContent}
                 <img
                     className="w-full h-auto rounded-md mt-4"
@@ -33,6 +34,16 @@ const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, numHints, numHi
                 />
                 <p className="text-white mb-4">
                     Movie: <span className="font-semibold">{movieName}</span>
+                    {imdb_id && (
+                        <a
+                            href={`https://www.imdb.com/title/${imdb_id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-blue-400 hover:underline ml-2"
+                            >
+                            (IMDB)
+                        </a>
+                    )}
                 </p>
                 <div className="flex justify-between">
                     <button
