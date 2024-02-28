@@ -6,6 +6,8 @@ import SearchBar from "./components/SearchBar";
 import GameOverModal from "./components/GameOverModal";
 import GuessNumber from "./components/GuessNumber";
 import { getRandomNumber, getRandomYear } from "./util/random";
+import LandingModal from "./components/LandingModal";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 function App() {
   // Constants
@@ -13,6 +15,7 @@ function App() {
   const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
   const API_URL = "https://api.themoviedb.org/3/";
 
+  const [landingModalVisible, setLandingModalVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [movieData, setMovieData] = useState({});
@@ -22,7 +25,7 @@ function App() {
 
   // On Mount - Fetch & Set Data
   useEffect(() => {
-    fetchAndSetData();
+    //fetchAndSetData();
   }, []);
 
   const fetchAndSetData = async () => {
@@ -64,43 +67,51 @@ function App() {
   };
 
   const onRandomMovie = () => {
+    setIsLoading(true);
+    fetchAndSetData();
     setNumHints(1);
     setGameOver(false);
-    fetchAndSetData();
+    setLandingModalVisible(false);
   };
 
-  const onModalClose = () => {
+  const onGameOverModalClose = () => {
     setGameOver(false);
+  }
+
+  const onLandingModalClose = () => {
+    setLandingModalVisible(false);
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-800">
+      {/* Landing Modal */}
+      <LandingModal isVisible={landingModalVisible} onModalClose={onLandingModalClose} onRandomMovie={onRandomMovie} />
+
+      {/* Game Over Modal */}
+      {gameOver && (
+        <GameOverModal
+          isVisible={gameOver}
+          onModalClose={onGameOverModalClose}
+          onRandomMovie={onRandomMovie}
+          numHints={NUM_HINTS}
+          numHintsUsed={numHints}
+          movieName={movieName}
+          posterPath={movieData.poster_path}
+          imdb_id={movieData.imdb_id}
+        />
+      )}
+
       <Header />
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
         {/* Loading */}
         {isLoading ? (
-          <div>Loading...</div>
+          <LoadingSpinner />
         ) : (
-          <>
-            {/* Game Over Modal */}
-            {gameOver && (
-              <GameOverModal
-                isVisible={gameOver}
-                onModalClose={onModalClose}
-                onRandomMovie={onRandomMovie}
-                numHints={NUM_HINTS}
-                numHintsUsed={numHints}
-                movieName={movieName}
-                posterPath={movieData.poster_path}
-                imdb_id={movieData.imdb_id}
-              />
-            )}
             <HintArea
               movieData={movieData}
               creditData={creditData}
               numHints={numHints}
             />
-          </>
         )}
       </div>
       <div className="mx-auto max-w-screen-md w-full mt-auto">
