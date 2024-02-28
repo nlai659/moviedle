@@ -9,6 +9,8 @@ This is a project to guess movies based on a series of clues. With the main hint
 3. Run `npm run dev`
 4. Open your browser and go to `http://localhost:5173`
 
+![Moviedle](./src/assets/Screenshot_moviedle.png)
+
 ## How to play
 
 1. Read the synopsis
@@ -32,5 +34,3 @@ This is a project to guess movies based on a series of clues. With the main hint
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-```
-
