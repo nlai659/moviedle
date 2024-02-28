@@ -25,12 +25,6 @@ This is a project to guess movies based on a series of clues. With the main hint
 - [ ] Add a score system (based on time and hints used)
 - [ ] Add infinite mode (keep guessing movies until you want to stop - with a score system)
 
-### Dev Todos:
-
-- [ ] Add animations
-- [ ] Add Loaders
-- [ ] Add Start screen
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details

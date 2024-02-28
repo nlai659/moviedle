@@ -12,7 +12,6 @@ import LoadingSpinner from "./components/LoadingSpinner";
 function App() {
   // Constants
   const NUM_HINTS = 5;
-  const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
   const API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
   const API_URL = "https://api.themoviedb.org/3/";
 

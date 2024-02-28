@@ -6,7 +6,6 @@ type SearchBarProps = {
 
 const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const API_URL = "https://api.themoviedb.org/3/search/movie"
-  const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
   const API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -72,7 +71,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   return (
     <div className="relative">
       {movieList.length > 0 && (
-        <div className="absolute -top-52 w-full max-w-screen-md bg-gray-800 rounded-lg shadow-md border border-gray-700">
+        <div className="absolute bottom-36 w-full max-w-screen-md bg-gray-800 rounded-lg shadow-md border border-gray-700">
           {movieList.map((movie: string) => (
             <div
               key={movie}
