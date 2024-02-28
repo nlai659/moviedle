@@ -1,4 +1,5 @@
 import React from 'react';
+import genreMapping from '../../util/genreMapping';
 
 type Genre = {
     id: number;
@@ -6,11 +7,16 @@ type Genre = {
 }
 
 type GenreHintProps = {
-  genres: Genre[];
+  genres?: Genre[];
+  genre_ids?: number[];
   hidden?: boolean;
 };
 
-const GenreHint: React.FC<GenreHintProps> = ({ genres, hidden }) => {
+const GenreHint: React.FC<GenreHintProps> = ({ genres, genre_ids, hidden }) => {
+  if (!genres) {
+    genres = (genre_ids?.map((id) => genreMapping.genres.find((genre) => genre.id === id)) || []) as Genre[];
+  }
+
   return (
     <div className="bg-gray-700 rounded-lg shadow-md p-2 m-1">
       <p className="text-white font-bold ml-1">Genres:</p>

@@ -19,7 +19,7 @@ const HintArea = ({ movieData, creditData, numHints }: HintAreaProps) => {
   // Array of hint components
   const hintComponents = [
     <SynopsisHint synopsis={movieData.overview} />,
-    <GenreHint genres={movieData.genres} />,
+    <GenreHint genres={movieData.genres} genre_ids={movieData.genre_ids} />,
     <DateHint date={movieData.release_date} />,
     <CreditHint name={actor1.name} character={actor1.character} profile_path={actor1.profile_path} />,
     <CreditHint name={actor2.name} character={actor2.character} profile_path={actor2.profile_path} />,

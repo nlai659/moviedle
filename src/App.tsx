@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import HintArea from "./components/HintArea";
 import SearchBar from "./components/SearchBar";
+import GameOverModal from "./components/GameOverModal";
+import GuessNumber from "./components/GuessNumber";
+import { getRandomNumber, getRandomYear } from "./util/random";
 
 // Temp Data
 import tempMovieData from "./assets/496243";
 import tempCreditData from "./assets/credits";
-import GameOverModal from "./components/GameOverModal";
-import GuessNumber from "./components/GuessNumber";
 
 function App() {
+  // Constants
   const NUM_HINTS = 5;
+  const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+  const READ_ACCESS_TOKEN = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+  const API_URL = "https://api.themoviedb.org/3/";
 
   const [isLoading, setIsLoading] = useState(true);
   const [gameOver, setGameOver] = useState(false);
@@ -20,14 +25,32 @@ function App() {
   const [movieName, setMovieName] = useState("");
   const [numHints, setNumHints] = useState(1);
 
+  // On Mount - Fetch & Set Data
   useEffect(() => {
-    console.log("App Mounted");
-    // Set Data
-    setMovieData(tempMovieData);
-    setCreditData(tempCreditData);
-    setMovieName(tempMovieData.title);
-    setIsLoading(false);
+    fetchAndSetData();
   }, []);
+
+  const fetchAndSetData = async () => {
+    const randomYear = getRandomYear();
+    const randomPage = getRandomNumber(1, 5);
+    const randomNumber = getRandomNumber(0, 19);
+    
+    // Fetch Movie Data
+    const movieDataResponse = await fetch(
+      `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&primary_release_year=${randomYear}`
+    ).then((res) => res.json()).then((data) => data.results[randomNumber]);
+
+    // Fetch Credit Data
+    const creditDataResponse = await fetch(
+      `${API_URL}movie/${movieDataResponse.id}/credits?api_key=${API_KEY}`
+    ).then((res) => res.json());
+
+    // Set Movie Data
+    setMovieData(movieDataResponse);
+    setCreditData(creditDataResponse);
+    setMovieName(movieDataResponse.title);
+    setIsLoading(false);
+  };
 
   const checkAnswer = (answer: string) => {
     // Check Answer
@@ -49,6 +72,7 @@ function App() {
   const onRandomMovie = () => {
     setNumHints(1);
     setGameOver(false);
+    fetchAndSetData();
   };
 
   const onModalClose = () => {
