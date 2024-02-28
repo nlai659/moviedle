@@ -1,11 +1,12 @@
 import { useState } from "react";
 
 type SearchBarProps = {
-  checkAnswer: (answer: string) => void;
+  checkAnswer: (answer: string) => boolean;
 };
 
 const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [shake, setShake] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -13,11 +14,15 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     setSearchTerm("");
     
     // Check Correct Answer
-    checkAnswer(searchTerm);
+    const answer = checkAnswer(searchTerm);
 
-    // Correct Answer Logic
-
-    // Incorrect Answer Logic
+    // Shake if incorrect
+    if (!answer) {
+      setShake(true);
+      setTimeout(() => {
+        setShake(false);
+      }, 500);
+    }
   };
 
   const handleSkip = () => {
@@ -31,7 +36,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
         placeholder="Search for a movie"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full p-4 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-500"
+        className={`w-full p-4 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-500 ${shake? 'animate-shake' : ''}`}
       />
       <button
         type="submit"

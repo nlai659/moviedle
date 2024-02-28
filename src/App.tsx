@@ -54,7 +54,7 @@ function App() {
     // Check Answer
     if (answer.toLowerCase() === movieName.toLowerCase()) {
       setGameOver(true);
-      return;
+      return true;
     } else {
       setNumHints((prevNumHints) => prevNumHints + 1);
 
@@ -63,6 +63,8 @@ function App() {
         setGameOver(true);
         return;
       }
+
+      return false;
     }
   };
 
