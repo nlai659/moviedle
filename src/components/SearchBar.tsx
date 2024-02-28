@@ -20,8 +20,12 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     // Incorrect Answer Logic
   };
 
+  const handleSkip = () => {
+    checkAnswer("");
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-700 rounded-lg shadow-md p-2">
+    <form onSubmit={handleSubmit} className="bg-gray-700 rounded-lg shadow-md p-2 flex flex-wrap">
       <input
         type="text"
         placeholder="Search for a movie"
@@ -31,12 +35,22 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       />
       <button
         type="submit"
-        className="bg-blue-500 text-white p-4 w-full mt-4 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+        className="bg-blue-500 text-white p-4 w-5/6 mt-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
       >
         Submit
       </button>
+      <button
+        type="button"
+        onClick={handleSkip}
+        className="bg-red-500 text-white p-4 mt-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300 ml-2 flex-grow"
+      >
+        Skip
+      </button>
     </form>
   );
+  
+  
+  
   
 };
 
