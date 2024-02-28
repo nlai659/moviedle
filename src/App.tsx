@@ -8,6 +8,7 @@ import SearchBar from "./components/SearchBar";
 import tempMovieData from "./assets/496243";
 import tempCreditData from "./assets/credits";
 import GameOverModal from "./components/GameOverModal";
+import GuessNumber from "./components/GuessNumber";
 
 function App() {
   const NUM_HINTS = 5;
@@ -31,8 +32,8 @@ function App() {
   const checkAnswer = (answer: string) => {
     // Check Answer
     if (answer.toLowerCase() === movieName.toLowerCase()) {
-      console.log("Correct Answer");
-      console.log("Game Over WIN");
+      setGameOver(true);
+      return;
     } else {
       setNumHints((prevNumHints) => prevNumHints + 1);
       console.log("Incorrect Answer");
@@ -40,16 +41,19 @@ function App() {
       // Out of Hints
       if (numHints > NUM_HINTS) {
         setGameOver(true);
-        console.log("Game Over LOSE");
         return;
       }
     }
   };
 
-  const resetGame = () => {
+  const onRandomMovie = () => {
     setNumHints(1);
     setGameOver(false);
   };
+
+  const onModalClose = () => {
+    setGameOver(false);
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-800">
@@ -62,7 +66,7 @@ function App() {
           <>
             {/* Game Over Modal */}
             {gameOver && (
-              <GameOverModal isVisible={gameOver} onClose={resetGame} />
+              <GameOverModal isVisible={gameOver} onModalClose={onModalClose} onRandomMovie={onRandomMovie} numHints={NUM_HINTS} numHintsUsed={numHints} />
             )}
             <HintArea
               movieData={movieData}
@@ -73,6 +77,7 @@ function App() {
         )}
       </div>
       <div className="mx-auto max-w-screen-md w-full mt-auto">
+        <GuessNumber numHints={NUM_HINTS} numHintsUsed={numHints - 1} />
         <SearchBar checkAnswer={checkAnswer} />
         <Footer />
       </div>

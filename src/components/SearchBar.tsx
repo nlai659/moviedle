@@ -8,9 +8,9 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
     if (searchTerm === "") return;
     setSearchTerm("");
-    e.preventDefault();
     
     // Check Correct Answer
     checkAnswer(searchTerm);
