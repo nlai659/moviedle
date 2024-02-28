@@ -50,7 +50,7 @@ function App() {
 
     // Fetch Credit Data
     const creditDataResponse = await fetch(
-      `${API_URL}movie/${movieDataResponse.id}/credits?api_key=${API_KEY}`
+      `${API_URL}movie/${movieDataResponse.id}/credits`, options
     ).then((res) => res.json());
 
     // Set Movie Data
