@@ -66,7 +66,7 @@ function App() {
           <>
             {/* Game Over Modal */}
             {gameOver && (
-              <GameOverModal isVisible={gameOver} onModalClose={onModalClose} onRandomMovie={onRandomMovie} numHints={NUM_HINTS} numHintsUsed={numHints} />
+              <GameOverModal isVisible={gameOver} onModalClose={onModalClose} onRandomMovie={onRandomMovie} numHints={NUM_HINTS} numHintsUsed={numHints} movieName={movieName} posterPath={movieData.poster_path} />
             )}
             <HintArea
               movieData={movieData}
