@@ -13,6 +13,7 @@ function App() {
   // Constants
   const NUM_HINTS = 5;
   const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+  const API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
   const API_URL = "https://api.themoviedb.org/3/";
 
   const [landingModalVisible, setLandingModalVisible] = useState(true);
@@ -30,12 +31,21 @@ function App() {
 
   const fetchAndSetData = async () => {
     const randomYear = getRandomYear();
-    const randomPage = getRandomNumber(1, 5);
+    const randomPage = getRandomNumber(1, 3);
     const randomNumber = getRandomNumber(0, 19);
     
     // Fetch Movie Data
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": `Bearer ${API_READ_ACCESS}`,
+      },
+    }
+
     const movieDataResponse = await fetch(
-      `${API_URL}discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&primary_release_year=${randomYear}`
+      `${API_URL}discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&primary_release_year=${randomYear}`, options
     ).then((res) => res.json()).then((data) => data.results[randomNumber]);
 
     // Fetch Credit Data
