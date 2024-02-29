@@ -2,17 +2,14 @@ type GameOverModalProps = {
     isVisible: boolean;
     onModalClose: () => void;
     onRandomMovie: () => void;
-    numHints: number;
-    numHintsUsed: number;
+    gameWin: boolean;
     movieName: string;
     posterPath: string;
     imdb_id?: string;
 };
 
-const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, numHints, numHintsUsed, movieName, posterPath, imdb_id }: GameOverModalProps) => {
-    const win = numHintsUsed-1 <= numHints;
-
-    const modalContent = win ? (
+const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, gameWin, movieName, posterPath, imdb_id }: GameOverModalProps) => {
+    const modalContent = gameWin ? (
         <div>
             <h2 className="text-2xl font-bold text-white mb-4">Congratulations!</h2>
         </div>
@@ -25,10 +22,10 @@ const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, numHints, numHi
     return (
         <div className={`z-50 fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-            <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50">
+            <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50 animate-jump-in">
                 {modalContent}
                 <img
-                    className="w-full h-auto rounded-md mt-4"
+                    className="w-full h-auto rounded-md mt-4 min-w-[400px] min-h-[600px]"
                     src={`https://image.tmdb.org/t/p/w500${posterPath}`}
                     alt={movieName}
                 />

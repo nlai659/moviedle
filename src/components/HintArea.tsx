@@ -29,7 +29,7 @@ const HintArea = ({ movieData, creditData, numHints }: HintAreaProps) => {
   return (
     <div>
       {hintComponents.map((hint, index) => (
-        <div key={index}>{index >= numHints ? React.cloneElement(hint, { hidden: true }) : hint}</div>
+        <div key={index}>{index > numHints ? React.cloneElement(hint, { hidden: true }) : hint}</div>
       ))}
     </div>
   );
