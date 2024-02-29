@@ -5,16 +5,14 @@ import HintArea from "./components/HintArea";
 import SearchBar from "./components/SearchBar";
 import GameOverModal from "./components/GameOverModal";
 import GuessNumber from "./components/GuessNumber";
-import { getRandomNumber, getRandomYear } from "./util/random";
 import LandingModal from "./components/LandingModal";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ReactConfetti from "react-confetti";
+import { fetchMovieCredits, fetchRandomMovie } from "./util/api";
 
 function App() {
   // Constants
   const NUM_HINTS = 5;
-  const API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
-  const API_URL = "https://api.themoviedb.org/3/";
 
   const [landingModalVisible, setLandingModalVisible] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,28 +29,8 @@ function App() {
   }, []);
 
   const fetchAndSetData = async () => {
-    const randomYear = getRandomYear();
-    const randomPage = getRandomNumber(1, 3);
-    const randomNumber = getRandomNumber(0, 19);
-    
-    // Fetch Movie Data
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Authorization": `Bearer ${API_READ_ACCESS}`,
-      },
-    }
-
-    const movieDataResponse = await fetch(
-      `${API_URL}discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&primary_release_year=${randomYear}`, options
-    ).then((res) => res.json()).then((data) => data.results[randomNumber]);
-
-    // Fetch Credit Data
-    const creditDataResponse = await fetch(
-      `${API_URL}movie/${movieDataResponse.id}/credits`, options
-    ).then((res) => res.json());
+    const movieDataResponse = await fetchRandomMovie();
+    const creditDataResponse = await fetchMovieCredits(movieDataResponse.id);
 
     // Set Movie Data
     setMovieData(movieDataResponse);
@@ -62,18 +40,15 @@ function App() {
   };
 
   const checkAnswer = (answer: string) => {
-    // Check Answer
     if (answer.toLowerCase() === movieName.toLowerCase()) {
       setGameOver(true);
       setShowConfetti(true);
     } else {
       setNumHints((prevNumHints) => prevNumHints + 1);
-
       // Out of Hints
       if (numHints >= NUM_HINTS) {
         setGameOver(true);
       }
-
       return false;
     }
   };
@@ -103,7 +78,7 @@ function App() {
     <div className="flex flex-col min-h-screen bg-gray-800">
       {/* Confetti */}
       {showConfetti && <ReactConfetti recycle={false} numberOfPieces={500} />}
-      
+
       {/* Landing Modal */}
       <LandingModal
         isVisible={landingModalVisible}

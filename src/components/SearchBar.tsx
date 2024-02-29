@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { fetchMovieList } from "../util/api";
 
 type SearchBarProps = {
   checkAnswer: (answer: string) => boolean | undefined;
 };
 
 const SearchBar = ({ checkAnswer }: SearchBarProps) => {
-  const API_URL = "https://api.themoviedb.org/3/search/movie";
-  const API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
-
   const [searchTerm, setSearchTerm] = useState("");
   const [shake, setShake] = useState(false);
   const [movieList, setMovieList] = useState<string[]>([]);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState<number>(-1);
 
+  // Keyboard Navigation (For Suggestion List)
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowUp") {
@@ -43,7 +42,6 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       setSelectedSuggestionIndex(-1);
       return;
     }
-
     if (searchTerm === "") return;
     
     // Check Correct Answer
@@ -63,20 +61,8 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     checkAnswer("");
   };
 
-  const fetchMovieList = async (input: string) => {
-    const options = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Authorization: `Bearer ${API_READ_ACCESS}`,
-      },
-    };
-
-    const movieListResponse = await fetch(
-      `${API_URL}?query=${input}&include_adult=false&language=en-US&page=1`,
-      options
-    ).then((res) => res.json());
+  const fetchAndSetMovieList = async (input: string) => {
+    const movieListResponse = await fetchMovieList(input);
 
     if (movieListResponse.results) {
       // Sort movies by popularity
@@ -100,7 +86,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       setMovieList([]);
       setSelectedSuggestionIndex(-1);
     } else {
-      fetchMovieList(e.target.value);
+      fetchAndSetMovieList(e.target.value);
     }
   };
 
