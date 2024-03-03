@@ -1,10 +1,10 @@
 type LandingModalProps = {
     isVisible: boolean;
-    onModalClose: () => void;
+    onPlay: () => void;
     onRandomMovie: () => void;
 };
 
-const LandingModal = ({ isVisible, onModalClose, onRandomMovie }: LandingModalProps) => {
+const LandingModal = ({ isVisible, onPlay: onModalClose, onRandomMovie }: LandingModalProps) => {
     return (
         <div className={`fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
@@ -19,7 +19,7 @@ const LandingModal = ({ isVisible, onModalClose, onRandomMovie }: LandingModalPr
                         className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
                         onClick={onModalClose}
                         >
-                        Start Game!
+                        Play Daily!
                     </button>
                     <button
                         className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-300"

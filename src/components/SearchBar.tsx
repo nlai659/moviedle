@@ -96,7 +96,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   };
 
   return (
-    <div className="relative">
+    <div>
       {movieList.length > 0 && (
         <div className="absolute bottom-36 w-full max-w-screen-md bg-gray-800 rounded-lg shadow-md border border-gray-700">
           {movieList.map((movie: string, index: number) => (

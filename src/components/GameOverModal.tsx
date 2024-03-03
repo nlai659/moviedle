@@ -1,3 +1,5 @@
+import DailyCountDown from "./DailyCountDown";
+
 type GameOverModalProps = {
     isVisible: boolean;
     onModalClose: () => void;
@@ -24,6 +26,7 @@ const GameOverModal = ({ isVisible, onModalClose, onRandomMovie, gameWin, movieN
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
             <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50 animate-jump-in">
                 {modalContent}
+                <DailyCountDown />
                 <img
                     className="w-full h-auto rounded-md mt-4 min-w-[400px] min-h-[600px]"
                     src={`https://image.tmdb.org/t/p/w500${posterPath}`}

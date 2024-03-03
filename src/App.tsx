@@ -8,13 +8,13 @@ import GuessNumber from "./components/GuessNumber";
 import LandingModal from "./components/LandingModal";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ReactConfetti from "react-confetti";
-import { fetchMovieCredits, fetchRandomMovie } from "./util/api";
+import { fetchMovieCredits, fetchRandomMovie, fetchDailyMovie } from "./util/api";
 
 function App() {
   // Constants
   const NUM_HINTS = 5;
 
-  const [landingModalVisible, setLandingModalVisible] = useState(true);
+  const [landingModalVisible, setLandingModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [gameOver, setGameOver] = useState(false);
   const [movieData, setMovieData] = useState({});
@@ -22,11 +22,49 @@ function App() {
   const [movieName, setMovieName] = useState("");
   const [numHints, setNumHints] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isDaily, setIsDaily] = useState(true);
 
   // On Mount - Fetch & Set Data
   useEffect(() => {
-    //fetchAndSetData();
+    console.log("App Mounted");
+    fetchAndSetDailyData();
   }, []);
+
+  const fetchAndSetDailyData = async () => {
+    // Set Daily Movie Data
+    const movieDataResponse = await fetchDailyMovie();
+    const creditDataResponse = await fetchMovieCredits(movieDataResponse.id);
+
+    // Set Movie Data
+    setMovieData(movieDataResponse);
+    setCreditData(creditDataResponse);
+    setMovieName(movieDataResponse.title);
+    setIsLoading(false);
+
+    configureDaily();
+  }
+
+  const configureDaily = () => {
+    const currentDate = new Date();
+
+    // Visited Today
+    if (localStorage.getItem("lastDateVisited") === currentDate.toDateString()) {
+      setLandingModalVisible(false);
+      
+      // load previous game state
+      const numHints = parseInt(localStorage.getItem("numHints") || "0");
+      setNumHints(numHints);
+      if (numHints >= NUM_HINTS) {
+        setGameOver(true);
+      }
+    } else {
+      // Hasn't Visited Today
+      setIsDaily(true);
+      setLandingModalVisible(true);
+      localStorage.setItem("lastDateVisited", currentDate.toDateString());
+    }
+};
+
 
   const fetchAndSetData = async () => {
     const movieDataResponse = await fetchRandomMovie();
@@ -45,6 +83,10 @@ function App() {
       setShowConfetti(true);
     } else {
       setNumHints((prevNumHints) => prevNumHints + 1);
+      if (isDaily) {
+        localStorage.setItem("numHints", (numHints + 1).toString());
+      }
+
       // Out of Hints
       if (numHints >= NUM_HINTS) {
         setGameOver(true);
@@ -54,6 +96,7 @@ function App() {
   };
 
   const onRandomMovie = () => {
+    setIsDaily(false);
     resetGame();
     fetchAndSetData();
     setLandingModalVisible(false);
@@ -70,7 +113,8 @@ function App() {
     setGameOver(false);
   }
 
-  const onLandingModalClose = () => {
+  const onPlay = () => {
+    setIsDaily(true);
     setLandingModalVisible(false);
   }
 
@@ -82,7 +126,7 @@ function App() {
       {/* Landing Modal */}
       <LandingModal
         isVisible={landingModalVisible}
-        onModalClose={onLandingModalClose}
+        onPlay={onPlay}
         onRandomMovie={onRandomMovie}
       />
 
