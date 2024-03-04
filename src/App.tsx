@@ -52,7 +52,7 @@ function App() {
       setLandingModalVisible(false);
       
       // load previous game state
-      const numHints = parseInt(localStorage.getItem("numHints") || "0");
+      const numHints = parseInt(localStorage.getItem("numHintsDaily") || "0");
       setNumHints(numHints);
       if (numHints >= NUM_HINTS) {
         setGameOver(true);
@@ -84,7 +84,7 @@ function App() {
     } else {
       setNumHints((prevNumHints) => prevNumHints + 1);
       if (isDaily) {
-        localStorage.setItem("numHints", (numHints + 1).toString());
+        localStorage.setItem("numHintsDaily", (numHints + 1).toString());
       }
 
       // Out of Hints
@@ -109,10 +109,6 @@ function App() {
     setShowConfetti(false);
   }
 
-  const onGameOverModalClose = () => {
-    setGameOver(false);
-  }
-
   const onPlay = () => {
     setIsDaily(true);
     setLandingModalVisible(false);
@@ -133,7 +129,6 @@ function App() {
       {/* Game Over Modal */}
       <GameOverModal
         isVisible={gameOver}
-        onModalClose={onGameOverModalClose}
         onRandomMovie={onRandomMovie}
         gameWin={numHints <= NUM_HINTS}
         movieName={movieName}
