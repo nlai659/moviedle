@@ -2,6 +2,7 @@ import DailyCountDown from "./DailyCountDown";
 
 type GameOverModalProps = {
     isVisible: boolean;
+    isDaily: boolean;
     onRandomMovie: () => void;
     gameWin: boolean;
     movieName: string;
@@ -9,7 +10,7 @@ type GameOverModalProps = {
     imdb_id?: string;
 };
 
-const GameOverModal = ({ isVisible, onRandomMovie, gameWin, movieName, posterPath, imdb_id }: GameOverModalProps) => {
+const GameOverModal = ({ isVisible, isDaily, onRandomMovie, gameWin, movieName, posterPath, imdb_id }: GameOverModalProps) => {
     const modalContent = gameWin ? (
         <div>
             <h2 className="text-2xl font-bold text-white mb-4">Congratulations!</h2>
@@ -25,7 +26,7 @@ const GameOverModal = ({ isVisible, onRandomMovie, gameWin, movieName, posterPat
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
             <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50 animate-jump-in">
                 {modalContent}
-                <DailyCountDown />
+                {isDaily && <DailyCountDown />  }
                 <img
                     className="w-full h-auto rounded-md mt-4 min-w-[400px] min-h-[600px]"
                     src={`https://image.tmdb.org/t/p/w500${posterPath}`}

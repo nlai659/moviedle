@@ -65,20 +65,23 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     const movieListResponse = await fetchMovieList(input);
 
     if (movieListResponse.results) {
-      // Sort movies by popularity
-      movieListResponse.results.sort(
-        (a: { popularity: number }, b: { popularity: number }) =>
-          b.popularity - a.popularity
+      // Sort movies by name
+      movieListResponse.results.sort((a: any, b: any) =>
+        a.title.localeCompare(b.title)
       );
 
       // Extract titles of the first 5 movies
-      const movies = movieListResponse.results
-        .slice(0, 5)
+      const movies: string[] = movieListResponse.results
         .map((movie: any) => movie.title);
 
-      setMovieList(movies);
+      // Remove duplicates
+      const uniqueMovies = Array.from(new Set(movies));
+
+      setMovieList(uniqueMovies);
     }
   };
+
+  
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -98,7 +101,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   return (
     <div>
       {movieList.length > 0 && (
-        <div className="absolute bottom-36 w-full max-w-screen-md bg-gray-800 rounded-lg shadow-md border border-gray-700">
+        <div className="absolute bottom-56 w-full max-w-screen-md max-h-36 overflow-auto bg-gray-800 rounded-lg shadow-md border border-gray-700">
           {movieList.map((movie: string, index: number) => (
             <div
               key={movie}

@@ -129,6 +129,7 @@ function App() {
       {/* Game Over Modal */}
       <GameOverModal
         isVisible={gameOver}
+        isDaily={isDaily}
         onRandomMovie={onRandomMovie}
         gameWin={numHints <= NUM_HINTS}
         movieName={movieName}
