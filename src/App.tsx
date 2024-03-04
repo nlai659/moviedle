@@ -9,6 +9,8 @@ import LandingModal from "./components/LandingModal";
 import LoadingSpinner from "./components/LoadingSpinner";
 import ReactConfetti from "react-confetti";
 import { fetchMovieCredits, fetchRandomMovie, fetchDailyMovie } from "./util/api";
+import CategorySelector from "./components/CategorySelector";
+import { useAppSelector } from "./components/redux/hooks";
 
 function App() {
   // Constants
@@ -24,33 +26,57 @@ function App() {
   const [showConfetti, setShowConfetti] = useState(false);
   const [isDaily, setIsDaily] = useState(true);
 
+  const category = useAppSelector((state) => state.category.category);
+
   // On Mount - Fetch & Set Data
   useEffect(() => {
-    console.log("App Mounted");
-    fetchAndSetDailyData();
+    fetchAndSetData(category);
   }, []);
 
-  const fetchAndSetDailyData = async () => {
-    // Set Daily Movie Data
-    const movieDataResponse = await fetchDailyMovie();
-    const creditDataResponse = await fetchMovieCredits(movieDataResponse.id);
+  // Change Category
+  useEffect(() => {
+    resetGame();
+    fetchAndSetData(category)
+    
+  }, [category]);
 
-    // Set Movie Data
-    setMovieData(movieDataResponse);
-    setCreditData(creditDataResponse);
-    setMovieName(movieDataResponse.title);
-    setIsLoading(false);
-
-    configureDaily();
-  }
+  const fetchAndSetData = async (category: number) => {
+    let movieDataResponse, creditDataResponse;
+  
+    switch (category) {
+      case 0:
+        movieDataResponse = await fetchRandomMovie();
+        console.log(isDaily);
+  
+        if (isDaily) {
+          movieDataResponse = await fetchDailyMovie();
+          configureDaily();
+        }
+  
+        creditDataResponse = await fetchMovieCredits(movieDataResponse.id);
+        // Set Movie Data
+        setMovieData(movieDataResponse);
+        setCreditData(creditDataResponse);
+        setMovieName(movieDataResponse.title);
+        setIsLoading(false);
+        break;
+      default:
+        // Handle default case if needed
+        break;
+    }
+  };
+  
+  
 
   const configureDaily = () => {
     const currentDate = new Date();
 
     // Visited Today
-    if (localStorage.getItem("lastDateVisited") === currentDate.toDateString()) {
+    if (
+      localStorage.getItem("lastDateVisited") === currentDate.toDateString()
+    ) {
       setLandingModalVisible(false);
-      
+
       // load previous game state
       const numHints = parseInt(localStorage.getItem("numHintsDaily") || "0");
       setNumHints(numHints);
@@ -63,18 +89,6 @@ function App() {
       setLandingModalVisible(true);
       localStorage.setItem("lastDateVisited", currentDate.toDateString());
     }
-};
-
-
-  const fetchAndSetData = async () => {
-    const movieDataResponse = await fetchRandomMovie();
-    const creditDataResponse = await fetchMovieCredits(movieDataResponse.id);
-
-    // Set Movie Data
-    setMovieData(movieDataResponse);
-    setCreditData(creditDataResponse);
-    setMovieName(movieDataResponse.title);
-    setIsLoading(false);
   };
 
   const checkAnswer = (answer: string) => {
@@ -97,10 +111,16 @@ function App() {
 
   const onRandomMovie = () => {
     setIsDaily(false);
-    resetGame();
-    fetchAndSetData();
     setLandingModalVisible(false);
   };
+  
+  useEffect(() => {
+    if (!isDaily) {
+      resetGame();
+      fetchAndSetData(category);
+    }
+  }, [isDaily]);
+  
 
   const resetGame = () => {
     setIsLoading(true);
@@ -139,7 +159,9 @@ function App() {
 
       <Header />
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
-        {isLoading ? (
+
+        <CategorySelector />
+        {isLoading ? (  
           <LoadingSpinner />
         ) : (
           <HintArea
