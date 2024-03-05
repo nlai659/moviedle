@@ -99,9 +99,9 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   };
 
   return (
-    <div>
+    <div className="relative" >
       {movieList.length > 0 && (
-        <div className="absolute bottom-56 w-full max-w-screen-md max-h-36 overflow-auto bg-gray-800 rounded-lg shadow-md border border-gray-700">
+        <div className="absolute bottom-36 w-full max-w-screen-md max-h-36 overflow-auto bg-gray-800 rounded-lg shadow-md border border-gray-700">
           {movieList.map((movie: string, index: number) => (
             <div
               key={movie}

@@ -22,7 +22,7 @@ const GameOverModal = ({ isVisible, isDaily, onRandomMovie, gameWin, movieName, 
     );
 
     return (
-        <div className={` z-50 fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
+        <div className={`z-50 fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
             <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50 animate-jump-in">
                 {modalContent}

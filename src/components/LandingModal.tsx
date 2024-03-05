@@ -6,9 +6,9 @@ type LandingModalProps = {
 
 const LandingModal = ({ isVisible, onPlay: onModalClose, onRandomMovie }: LandingModalProps) => {
     return (
-        <div className={`fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
+        <div className={`z-50 fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
             <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-            <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50">
+            <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative">
                 <h2 className="text-2xl font-bold text-white mb-4">Welcome to Moviedle!</h2>
                 <p className="text-white mb-4">
                     The game is simple, you will be given a movie synopsis and you have to guess the movie name.

@@ -10,6 +10,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import ReactConfetti from "react-confetti";
 import { fetchMovieCredits, fetchRandomMovie, fetchDailyMovie } from "./util/api";
 import CategorySelector from "./components/CategorySelector";
+import categoryMapping from "./util/categoryMapping";
 import { useAppSelector } from "./components/redux/hooks";
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
   const [landingModalVisible, setLandingModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [gameOver, setGameOver] = useState(false);
-  const [movieData, setMovieData] = useState({});
+  const [mediaData, setMediaData] = useState({});
   const [creditData, setCreditData] = useState({});
   const [movieName, setMovieName] = useState("");
   const [numHints, setNumHints] = useState(0);
@@ -28,36 +29,28 @@ function App() {
 
   const category = useAppSelector((state) => state.category.category);
 
-  // On Mount - Fetch & Set Data
-  useEffect(() => {
-    fetchAndSetData(category);
-  }, []);
-
-  // Change Category
   useEffect(() => {
     resetGame();
     fetchAndSetData(category)
-    
+    configureDaily();
   }, [category]);
 
   const fetchAndSetData = async (category: number) => {
-    let movieDataResponse, creditDataResponse;
+    let mediaDataResponse, creditDataResponse;
   
     switch (category) {
-      case 0:
-        movieDataResponse = await fetchRandomMovie();
-        console.log(isDaily);
+      case categoryMapping.MOVIE:
+        mediaDataResponse = await fetchRandomMovie();
   
         if (isDaily) {
-          movieDataResponse = await fetchDailyMovie();
-          configureDaily();
+          mediaDataResponse = await fetchDailyMovie();
         }
   
-        creditDataResponse = await fetchMovieCredits(movieDataResponse.id);
+        creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
         // Set Movie Data
-        setMovieData(movieDataResponse);
+        setMediaData(mediaDataResponse);
         setCreditData(creditDataResponse);
-        setMovieName(movieDataResponse.title);
+        setMovieName(mediaDataResponse.title);
         setIsLoading(false);
         break;
       default:
@@ -69,6 +62,8 @@ function App() {
   
 
   const configureDaily = () => {
+    if(!isDaily) return;
+
     const currentDate = new Date();
 
     // Visited Today
@@ -79,8 +74,10 @@ function App() {
 
       // load previous game state
       const numHints = parseInt(localStorage.getItem("numHintsDaily") || "0");
+      console.log("numHints in visit", numHints);
       setNumHints(numHints);
-      if (numHints >= NUM_HINTS) {
+      setGameOver(true);
+      if (numHints > NUM_HINTS) {
         setGameOver(true);
       }
     } else {
@@ -99,10 +96,11 @@ function App() {
       setNumHints((prevNumHints) => prevNumHints + 1);
       if (isDaily) {
         localStorage.setItem("numHintsDaily", (numHints + 1).toString());
+        console.log("numHintsDaily", numHints + 1);
       }
 
       // Out of Hints
-      if (numHints >= NUM_HINTS) {
+      if (numHints + 1 > NUM_HINTS) {
         setGameOver(true);
       }
       return false;
@@ -112,16 +110,10 @@ function App() {
   const onRandomMovie = () => {
     setIsDaily(false);
     setLandingModalVisible(false);
+    resetGame();
+    fetchAndSetData(category);
   };
   
-  useEffect(() => {
-    if (!isDaily) {
-      resetGame();
-      fetchAndSetData(category);
-    }
-  }, [isDaily]);
-  
-
   const resetGame = () => {
     setIsLoading(true);
     setNumHints(0);
@@ -153,8 +145,8 @@ function App() {
         onRandomMovie={onRandomMovie}
         gameWin={numHints <= NUM_HINTS}
         movieName={movieName}
-        posterPath={movieData.poster_path}
-        imdb_id={movieData.imdb_id}
+        posterPath={mediaData.poster_path}
+        imdb_id={mediaData.imdb_id}
       />
 
       <Header />
@@ -165,7 +157,7 @@ function App() {
           <LoadingSpinner />
         ) : (
           <HintArea
-            movieData={movieData}
+            movieData={mediaData}
             creditData={creditData}
             numHints={numHints}
           />
