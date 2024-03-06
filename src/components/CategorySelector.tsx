@@ -11,8 +11,8 @@ const CategorySelector = () => {
   };
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg">
-      <label htmlFor="category" className="text-white">Select a Category:</label>
+    <div>
+      <label htmlFor="category" className="text-white">Category:</label>
       <select id="category" value={category} onChange={handleCategoryChange} className="mt-1 block w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
         <option value="">Select...</option>
         {

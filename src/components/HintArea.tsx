@@ -4,26 +4,23 @@ import SynopsisHint from "./hints/SynopsisHint";
 import DateHint from "./hints/DateHint";
 import GenreHint from "./hints/GenreHint";
 import CreditHint from "./hints/CreditHint";
+import { MediaData } from "../types/mediaData";
 
 type HintAreaProps = {
-  movieData: any;
-  creditData: any;
+  mediaData: MediaData;
   numHints: number;
 };
 
-const HintArea = ({ movieData, creditData, numHints }: HintAreaProps) => {
-  const actor1 = creditData.cast[0];
-  const actor2 = creditData.cast[1];
-  const director = creditData.crew.find((member) => member.job === "Director");
+const HintArea = ({ mediaData, numHints }: HintAreaProps) => {
 
   // Array of hint components
   const hintComponents = [
-    <SynopsisHint synopsis={movieData.overview} />,
-    <GenreHint genres={movieData.genres} genre_ids={movieData.genre_ids} />,
-    <DateHint date={movieData.release_date} />,
-    <CreditHint name={actor1.name} character={actor1.character} profile_path={actor1.profile_path} />,
-    <CreditHint name={actor2.name} character={actor2.character} profile_path={actor2.profile_path} />,
-    <CreditHint name={director.name} character={director.job} profile_path={director.profile_path} />
+    <SynopsisHint synopsis={mediaData.synopsis} />,
+    <GenreHint genres={mediaData.genres} />,
+    <DateHint date={mediaData.date} />,
+    <CreditHint name={mediaData.castList[0].name} character={mediaData.castList[0].role} img_path={mediaData.castList[0].img_path} />,
+    <CreditHint name={mediaData.castList[1].name} character={mediaData.castList[1].role} img_path={mediaData.castList[1].img_path} />,
+    <CreditHint name={mediaData.castList[2].name} character={mediaData.castList[2].role} img_path={mediaData.castList[2].img_path} />,
   ];
 
   return (

@@ -1,6 +1,6 @@
 const getRandomYear = () => {
   const currentYear = new Date().getFullYear();
-  const minYear = 1980;
+  const minYear = 1990;
   return Math.floor(Math.random() * (currentYear - minYear + 1)) + minYear;
 };
 

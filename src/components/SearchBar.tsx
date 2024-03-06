@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchMovieList } from "../util/api";
+import { fetchMovieList } from "../util/apiTMDB";
 
 type SearchBarProps = {
   checkAnswer: (answer: string) => boolean | undefined;

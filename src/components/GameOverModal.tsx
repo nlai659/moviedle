@@ -29,7 +29,7 @@ const GameOverModal = ({ isVisible, isDaily, onRandomMovie, gameWin, movieName, 
                 {isDaily && <DailyCountDown />  }
                 <img
                     className="w-full h-auto rounded-md mt-4 min-w-[400px] min-h-[600px]"
-                    src={`https://image.tmdb.org/t/p/w500${posterPath}`}
+                    src={posterPath}
                     alt={movieName}
                 />
                 <p className="text-white mb-4">
