@@ -16,6 +16,7 @@ import {
   fetchTVCredits,
   fetchDailyTV,
 } from "./util/apiTMDB";
+import { fetchRandomAnime } from "./util/apiMAL";
 import categoryMapping from "./util/categoryMapping";
 import { useAppSelector } from "./components/redux/hooks";
 import { TMDB_movieParser, TMDB_tvParser } from "./util/hintDataParser";
@@ -86,6 +87,10 @@ function App() {
         setMediaData(mediaDataParsed);
         setIsLoading(false);
         break;
+      case categoryMapping.ANIME:
+        mediaDataResponse = await fetchRandomAnime(isDaily);
+        break;
+
       default:
         // Handle default case if needed
         break;
