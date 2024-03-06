@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchMovieList } from "../util/apiTMDB";
+import { fetchMovieList, fetchTVList } from "../util/apiTMDB";
+import { TMDB_suggestedMovieParser, TMDB_suggestedTVParser } from "../util/suggestedMediaParser";
+import { SuggestedMediaData } from "../types/SuggestedMediaData";
+import { useAppSelector } from "../components/redux/hooks";
+import categoryMapping from "../util/categoryMapping";
 
 type SearchBarProps = {
   checkAnswer: (answer: string) => boolean | undefined;
@@ -8,8 +12,10 @@ type SearchBarProps = {
 const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [shake, setShake] = useState(false);
-  const [movieList, setMovieList] = useState<string[]>([]);
+  const [suggestedMediaList, setSuggestedMediaList] = useState<SuggestedMediaData[]>([]);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState<number>(-1);
+
+  const category = useAppSelector((state) => state.category.category);
 
   // Keyboard Navigation (For Suggestion List)
   useEffect(() => {
@@ -17,12 +23,12 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       if (event.key === "ArrowUp") {
         event.preventDefault();
         setSelectedSuggestionIndex((prevIndex) =>
-          prevIndex <= 0 ? movieList.length - 1 : prevIndex - 1
+          prevIndex <= 0 ? suggestedMediaList.length - 1 : prevIndex - 1
         );
       } else if (event.key === "ArrowDown") {
         event.preventDefault();
         setSelectedSuggestionIndex((prevIndex) =>
-          prevIndex === movieList.length - 1 ? 0 : prevIndex + 1
+          prevIndex === suggestedMediaList.length - 1 ? 0 : prevIndex + 1
         );
       }
     };
@@ -32,13 +38,13 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [movieList]);
+  }, [suggestedMediaList]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedSuggestionIndex !== -1) {
-      setSearchTerm(movieList[selectedSuggestionIndex]);
-      setMovieList([]);
+      setSearchTerm(suggestedMediaList[selectedSuggestionIndex].title);
+      setSuggestedMediaList([]);
       setSelectedSuggestionIndex(-1);
       return;
     }
@@ -61,58 +67,57 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     checkAnswer("");
   };
 
-  const fetchAndSetMovieList = async (input: string) => {
-    const movieListResponse = await fetchMovieList(input);
+  const fetchAndSetSuggestedMediaList = async (input: string) => {
+    let uniqueMedia: SuggestedMediaData[] = [];
 
-    if (movieListResponse.results) {
-      // Sort movies by name
-      movieListResponse.results.sort((a: any, b: any) =>
-        a.title.localeCompare(b.title)
-      );
-
-      // Extract titles of the first 5 movies
-      const movies: string[] = movieListResponse.results
-        .map((movie: any) => movie.title);
-
-      // Remove duplicates
-      const uniqueMovies = Array.from(new Set(movies));
-
-      setMovieList(uniqueMovies);
+    switch (category) {
+      case categoryMapping.MOVIE:
+        uniqueMedia = await fetchMovieList(input).then((data) =>
+          TMDB_suggestedMovieParser(data.results)
+        );
+        break;
+      case categoryMapping.TV:
+        uniqueMedia = await fetchTVList(input).then((data) =>
+        TMDB_suggestedTVParser(data.results)
+        );
+        break;
+      default:
+        break;
     }
-  };
 
-  
+    setSuggestedMediaList(uniqueMedia);
+  };
 
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     if (e.target.value.length <= 2) {
-      setMovieList([]);
+      setSuggestedMediaList([]);
       setSelectedSuggestionIndex(-1);
     } else {
-      fetchAndSetMovieList(e.target.value);
+      fetchAndSetSuggestedMediaList(e.target.value);
     }
   };
 
   const handleSuggestionClick = (movie: string) => {
     setSearchTerm(movie);
-    setMovieList([]);
+    setSuggestedMediaList([]);
   };
 
   return (
     <div className="relative" >
-      {movieList.length > 0 && (
+      {suggestedMediaList.length > 0 && (
         <div className="absolute bottom-36 w-full max-w-screen-md max-h-36 overflow-auto bg-gray-800 rounded-lg shadow-md border border-gray-700">
-          {movieList.map((movie: string, index: number) => (
+          {suggestedMediaList.map((media: SuggestedMediaData, index: number) => (
             <div
-              key={movie}
+              key={media.title}
               className={`px-4 py-2 cursor-pointer text-white transition duration-300 rounded-lg ${
                 index === selectedSuggestionIndex
                   ? "bg-gray-700"
                   : "hover:bg-gray-700"
               }`}
-              onClick={() => handleSuggestionClick(movie)}
+              onClick={() => handleSuggestionClick(media.title)}
             >
-              {movie}
+              {media.title} 
             </div>
           ))}
         </div>

@@ -6,8 +6,6 @@ const TMDB_movieParser = (movieData: any, creditData: any): MediaData => {
     const castList: CastData[] = [];
     const director = creditData.crew.find((crewMember: any) => crewMember.job === "Director");
 
-    console.log(creditData)
-
     for (let i = 0; i < 3; i++) {
         if (i === 2 && director) {
             castList.push({
