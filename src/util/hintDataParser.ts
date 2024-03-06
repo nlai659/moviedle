@@ -75,4 +75,32 @@ const TMDB_tvParser = (tvData: any, creditData: any): MediaData => {
     }
 }
 
-export { TMDB_movieParser, TMDB_tvParser }
+const MAL_animeParser = (animeData: any, creditData: any): MediaData => {
+
+    const castList: CastData[] = [];
+
+    for (let i = 0; i < 3; i++) {
+        if (creditData[i]) {
+            castList.push({
+                name: `${creditData[i].node.first_name} ${creditData[i].node.last_name}`,
+                role: creditData[i].node.alternative_name,
+                img_path: creditData[i].node.main_picture.medium
+            });
+        }
+    }
+
+    const genres: string[] = animeData.genres.map((genre: any) => genre.name);
+
+    const date = `${animeData.start_season.season} ${animeData.start_season.year} (${animeData.start_date})`
+
+    return {
+        title: animeData.title,
+        synopsis: animeData.synopsis,
+        genres: genres,
+        date: date,
+        castList: castList,
+        poster_path: animeData.main_picture.large
+    }
+}
+
+export { TMDB_movieParser, TMDB_tvParser, MAL_animeParser }

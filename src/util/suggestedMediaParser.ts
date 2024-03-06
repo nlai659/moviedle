@@ -34,4 +34,16 @@ const TMDB_suggestedTVParser = (data: any[]): SuggestedMediaData[] => {
     return uniqueTVShows;
 }
 
-export { TMDB_suggestedMovieParser, TMDB_suggestedTVParser };
+const MAL_suggestedAnimeParser = (data: any[]): SuggestedMediaData[] => {
+    const animeList: SuggestedMediaData[] = data.map(
+        (anime: any) => ({
+            id: anime.mal_id,
+            title: anime.name,
+            img_path: anime.thumbnail_url,
+        })
+    );
+
+    return animeList;
+}
+
+export { TMDB_suggestedMovieParser, TMDB_suggestedTVParser, MAL_suggestedAnimeParser };

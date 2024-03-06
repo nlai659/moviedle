@@ -1,9 +1,10 @@
 import { getRandomNumber, splitmix32 } from "./random";
 
 const API_CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
-const API_URL = "https://cors-anywhere.herokuapp.com/https://api.myanimelist.net/v2/";
+const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+const API_URL = `${CORS_PROXY}https://api.myanimelist.net/v2/`;
 const API_SEARCH_URL =
-  "https://myanimelist.net/search/prefix.json?type=anime&keyword=jobless&v=1";
+  `${CORS_PROXY}https://myanimelist.net/search/prefix.json?type=`;
 
 const options = {
   method: "GET",
@@ -40,11 +41,38 @@ const fetchRandomAnime = async (isDaily: boolean) => {
     options
   )
     .then((res) => res.json())
-    .then((data) => data.data[0]);
-
-    console.log(animeDataResponse);
+    .then((data) => data.data[0].node);
 
   return animeDataResponse;
 };
 
-export { fetchRandomAnime };
+const fetchAnimeDetails = async (id: number) => {
+  const animeDetailsResponse = await fetch(
+    `${API_URL}anime/${id}?fields=id,title,main_picture,alternative_titles,start_date,synopsis,genres,start_season,source,rating,pictures`,
+    options
+  ).then((res) => res.json());
+
+  return animeDetailsResponse;
+}
+
+const fetchAnimeCredits = async (id: number) => {
+  const animeCreditsResponse = await fetch(
+    `${API_URL}anime/${id}/characters?fields=id,first_name,last_name,alternative_name,role,main_picture&limit=5`,
+    options
+  ).then((res) => res.json())
+  .then((data) => data.data);
+
+  return animeCreditsResponse;
+}
+
+const fetchAnimeList = async (input: string) => {
+  const animeListResponse = await fetch(
+    `${API_SEARCH_URL}anime&keyword=${input}&v=1`
+  ).then((res) => res.json())
+  .then((data) => data.categories[0].items);
+
+  return animeListResponse;
+}
+
+
+export { fetchRandomAnime, fetchAnimeDetails, fetchAnimeCredits, fetchAnimeList };

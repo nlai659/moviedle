@@ -16,10 +16,14 @@ import {
   fetchTVCredits,
   fetchDailyTV,
 } from "./util/apiTMDB";
-import { fetchRandomAnime } from "./util/apiMAL";
+import {
+  fetchRandomAnime,
+  fetchAnimeDetails,
+  fetchAnimeCredits,
+} from "./util/apiMAL";
 import categoryMapping from "./util/categoryMapping";
 import { useAppSelector } from "./components/redux/hooks";
-import { TMDB_movieParser, TMDB_tvParser } from "./util/hintDataParser";
+import { TMDB_movieParser, TMDB_tvParser, MAL_animeParser } from "./util/hintDataParser";
 import { MediaData } from "./types/mediaData";
 
 function App() {
@@ -89,6 +93,18 @@ function App() {
         break;
       case categoryMapping.ANIME:
         mediaDataResponse = await fetchRandomAnime(isDaily);
+        mediaDataResponse = await fetchAnimeDetails(mediaDataResponse.id);
+        creditDataResponse = await fetchAnimeCredits(mediaDataResponse.id);
+
+        console.log(mediaDataResponse);
+        console.log(creditDataResponse);
+
+        mediaDataParsed = MAL_animeParser(mediaDataResponse, creditDataResponse);
+
+        console.log(mediaDataParsed);
+
+        setMediaData(mediaDataParsed);
+        setIsLoading(false);
         break;
 
       default:

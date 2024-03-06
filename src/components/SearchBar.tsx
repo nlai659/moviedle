@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { fetchMovieList, fetchTVList } from "../util/apiTMDB";
-import { TMDB_suggestedMovieParser, TMDB_suggestedTVParser } from "../util/suggestedMediaParser";
+import { fetchAnimeList } from "../util/apiMAL";
+import {
+  TMDB_suggestedMovieParser,
+  TMDB_suggestedTVParser,
+  MAL_suggestedAnimeParser,
+} from "../util/suggestedMediaParser";
 import { SuggestedMediaData } from "../types/SuggestedMediaData";
 import { useAppSelector } from "../components/redux/hooks";
 import categoryMapping from "../util/categoryMapping";
@@ -81,6 +86,11 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
         TMDB_suggestedTVParser(data.results)
         );
         break;
+      case categoryMapping.ANIME:
+        uniqueMedia = await fetchAnimeList(input).then((data) =>
+        MAL_suggestedAnimeParser(data)
+        );
+        break;
       default:
         break;
     }
@@ -104,22 +114,31 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   };
 
   return (
-    <div className="relative" >
+    <div className="relative">
       {suggestedMediaList.length > 0 && (
         <div className="absolute bottom-36 w-full max-w-screen-md max-h-36 overflow-auto bg-gray-800 rounded-lg shadow-md border border-gray-700">
-          {suggestedMediaList.map((media: SuggestedMediaData, index: number) => (
-            <div
-              key={media.title}
-              className={`px-4 py-2 cursor-pointer text-white transition duration-300 rounded-lg ${
-                index === selectedSuggestionIndex
-                  ? "bg-gray-700"
-                  : "hover:bg-gray-700"
-              }`}
-              onClick={() => handleSuggestionClick(media.title)}
-            >
-              {media.title} 
-            </div>
-          ))}
+          {suggestedMediaList.map(
+            (media: SuggestedMediaData, index: number) => (
+              <div
+                key={media.title}
+                className={`flex items-center justify-between px-4 py-2 cursor-pointer text-white transition duration-300 rounded-lg ${
+                  index === selectedSuggestionIndex
+                    ? "bg-gray-700"
+                    : "hover:bg-gray-700"
+                }`}
+                onClick={() => handleSuggestionClick(media.title)}
+              >
+                <span>{media.title}</span>
+                {media.img_path && (
+                  <img
+                    src={media.img_path}
+                    alt={media.title}
+                    className="h-10 w-auto rounded-lg"
+                  />
+                )}
+              </div>
+            )
+          )}
         </div>
       )}
       <form
