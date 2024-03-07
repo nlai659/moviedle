@@ -1,6 +1,6 @@
 import genreMapping from "../mappings/genreMapping";
 import { MediaData } from "../../types/MediaData";
-import { CastData } from "../../types/castData";
+import { CastData } from "../../types/CastData";
 
 const TMDB_movieParser = (movieData: any, creditData: any): MediaData => {
     const castList: CastData[] = [];
@@ -92,14 +92,16 @@ const MAL_animeParser = (animeData: any, creditData: any): MediaData => {
     const genres: string[] = animeData.genres.map((genre: any) => genre.name);
 
     const date = `${animeData.start_season.season} ${animeData.start_season.year} (${animeData.start_date})`
+    const dateString = date.charAt(0).toUpperCase() + date.slice(1);
 
     return {
         title: animeData.title,
         synopsis: animeData.synopsis,
         genres: genres,
-        date: date,
+        date: dateString,
         castList: castList,
-        poster_path: animeData.main_picture.large
+        poster_path: animeData.main_picture.large,
+        link: `https://myanimelist.net/anime/${animeData.id}`
     }
 }
 

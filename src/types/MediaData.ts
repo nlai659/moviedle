@@ -1,4 +1,4 @@
-import { CastData } from './castData';
+import { CastData } from './CastData';
 
 type MediaData = {
     title: string;
@@ -7,6 +7,7 @@ type MediaData = {
     date: string;
     castList: CastData[];
     poster_path: string;
+    link?: string;
 }
 
 export type { MediaData }

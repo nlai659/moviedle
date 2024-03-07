@@ -8,23 +8,9 @@ import GuessNumber from "./components/game/GuessNumber";
 import LandingModal from "./components/modal/LandingModal";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import ReactConfetti from "react-confetti";
-import {
-  fetchMovieCredits,
-  fetchRandomMovie,
-  fetchDailyMovie,
-  fetchRandomTV,
-  fetchTVCredits,
-  fetchDailyTV,
-} from "./services/apiTMDB";
-import {
-  fetchRandomAnime,
-  fetchAnimeDetails,
-  fetchAnimeCredits,
-} from "./services/apiMAL";
-import categoryMapping from "./utils/mappings/categoryMapping";
 import { useAppSelector } from "./components/redux/hooks";
-import { TMDB_movieParser, TMDB_tvParser, MAL_animeParser } from "./utils/dataparsers/hintDataParser";
 import { MediaData } from "./types/MediaData";
+import { fetchData } from "./services/dataFetching";
 
 function App() {
   // Constants
@@ -43,77 +29,17 @@ function App() {
   useEffect(() => {
     resetGame();
     fetchAndSetData(category);
-    configureDaily();
+    configureSettings();
   }, [category]);
 
   const fetchAndSetData = async (category: number) => {
-    let mediaDataResponse, creditDataResponse;
-    let mediaDataParsed: MediaData;
-
-    switch (category) {
-      case categoryMapping.MOVIE:
-        if (isDaily) {
-          mediaDataResponse = await fetchDailyMovie();
-        } else {
-          mediaDataResponse = await fetchRandomMovie();
-        }
-        creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
-
-        mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
-        
-        // Error checking (doesnt work for daily)
-        if (mediaDataParsed.castList.length < 3 || mediaDataParsed.synopsis === "") {
-          fetchAndSetData(category);
-          return;
-        }
-
-        // Set Movie Data
-        setMediaData(mediaDataParsed);
-        setIsLoading(false);
-        break;
-      case categoryMapping.TV:
-        if (isDaily) {
-          mediaDataResponse = await fetchDailyTV();
-        } else {
-          mediaDataResponse = await fetchRandomTV();
-        }
-        creditDataResponse = await fetchTVCredits(mediaDataResponse.id);
-
-        mediaDataParsed = TMDB_tvParser(mediaDataResponse, creditDataResponse);
-
-        // Error checking (doesnt work for daily)
-        if (mediaDataParsed.castList.length < 3 || mediaDataParsed.synopsis === "") {
-          fetchAndSetData(category);
-          return;
-        }
-
-        // Set TV Data
-        setMediaData(mediaDataParsed);
-        setIsLoading(false);
-        break;
-      case categoryMapping.ANIME:
-        mediaDataResponse = await fetchRandomAnime(isDaily);
-        mediaDataResponse = await fetchAnimeDetails(mediaDataResponse.id);
-        creditDataResponse = await fetchAnimeCredits(mediaDataResponse.id);
-
-        console.log(mediaDataResponse);
-        console.log(creditDataResponse);
-
-        mediaDataParsed = MAL_animeParser(mediaDataResponse, creditDataResponse);
-
-        console.log(mediaDataParsed);
-
-        setMediaData(mediaDataParsed);
-        setIsLoading(false);
-        break;
-
-      default:
-        // Handle default case if needed
-        break;
-    }
+    const mediaData = await fetchData(category, isDaily);
+    setMediaData(mediaData);
+    setIsLoading(false);
   };
 
-  const configureDaily = () => {
+  // Configure Settings - daily, numHints, gameWon etc.
+  const configureSettings = () => {
     if (!isDaily) return;
 
     const currentDate = new Date();
@@ -150,13 +76,17 @@ function App() {
   };
 
   const checkAnswer = (answer: string) => {
+    // Correct Answer
     if (answer.toLowerCase() === mediaData.title.toLowerCase()) {
       setGameOver(true);
       setShowConfetti(true);
       if (isDaily) {
         localStorage.setItem(`gameWonDaily${category}`, "true");
       }
-    } else {
+      return true;
+    }
+    // Incorrect Answer
+    else {
       setNumHints((prevNumHints) => prevNumHints + 1);
       if (isDaily) {
         localStorage.setItem(
@@ -180,10 +110,10 @@ function App() {
   };
 
   useEffect(() => {
-    if (gameOver == false) {
+    if (gameOver === false && isDaily === false) {
       fetchAndSetData(category);
     }
-  }, [gameOver]);
+  }, [gameOver, isDaily]);
 
   const resetGame = () => {
     setIsLoading(true);
@@ -192,8 +122,7 @@ function App() {
     setShowConfetti(false);
   };
 
-  const onPlay = () => {
-    setIsDaily(true);
+  const onPlayDaily = () => {
     setLandingModalVisible(false);
   };
 
@@ -205,7 +134,7 @@ function App() {
       {/* Landing Modal */}
       <LandingModal
         isVisible={landingModalVisible}
-        onPlay={onPlay}
+        onPlayDaily={onPlayDaily}
         onRandomMovie={onRandomMovie}
       />
 
@@ -217,6 +146,7 @@ function App() {
         gameWin={numHints <= NUM_HINTS}
         movieName={mediaData.title}
         posterPath={mediaData.poster_path}
+        link={mediaData.link}
       />
 
       <Header />
