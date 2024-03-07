@@ -6,7 +6,7 @@ const options = {
     headers: {
         "Content-Type": "application/json",
         accept: "application/json",
-        "X-MAL-CLIENT-ID": `${API_CLIENT_ID}`,
+        "X-MAL-CLIENT-ID": "d4175515382d8e544f36590a1bf3ebf5",
     },
 };
 
