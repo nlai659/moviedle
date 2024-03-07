@@ -12,7 +12,7 @@ const options = {
 
 export const handler = async () => {
     const animeDetailsResponse = await fetch(
-        `${API_URL}anime/52991?fields=id,title,main_picture,alternative_titles,start_date,synopsis,genres,start_season,source,rating,pictures`,
+        `https://api.myanimelist.net/v2/anime/52991?fields=id,title,main_picture,alternative_titles,start_date,synopsis,genres,start_season,source,rating,pictures`,
         options
     ).then((res) => res.json());
 
