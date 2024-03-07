@@ -37,7 +37,7 @@ function App() {
   }, [category]);
 
   const testFunction = async () => {
-    const response = await fetch('/api/api').then(response => response.json());
+    const response = await fetch('/api/proxy').then(response => response.json());
     console.log(response);
   }
 
