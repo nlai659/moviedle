@@ -1,4 +1,4 @@
-import { SuggestedMediaData } from "../types/SuggestedMediaData";
+import { SuggestedMediaData } from "../../types/SuggestedMediaData";
 
 const TMDB_suggestedMovieParser = (data: any[]): SuggestedMediaData[] => {
     data.sort((a: any, b: any) => a.title.localeCompare(b.title));

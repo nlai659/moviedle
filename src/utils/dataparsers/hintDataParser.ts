@@ -1,6 +1,6 @@
-import genreMapping from "./genreMapping";
-import { MediaData } from "../types/mediaData";
-import { CastData } from "../types/castData";
+import genreMapping from "../mappings/genreMapping";
+import { MediaData } from "../../types/MediaData";
+import { CastData } from "../../types/castData";
 
 const TMDB_movieParser = (movieData: any, creditData: any): MediaData => {
     const castList: CastData[] = [];

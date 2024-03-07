@@ -1,10 +1,10 @@
 import React from "react";
 
-import SynopsisHint from "./hints/SynopsisHint";
-import DateHint from "./hints/DateHint";
-import GenreHint from "./hints/GenreHint";
-import CreditHint from "./hints/CreditHint";
-import { MediaData } from "../types/MediaData";
+import SynopsisHint from "../hints/SynopsisHint";
+import DateHint from "../hints/DateHint";
+import GenreHint from "../hints/GenreHint";
+import CreditHint from "../hints/CreditHint";
+import { MediaData } from "../../types/MediaData";
 
 type HintAreaProps = {
   mediaData: MediaData;

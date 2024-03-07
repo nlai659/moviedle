@@ -1,4 +1,4 @@
-import Categories from "../../util/categoryMapping";
+import Categories from "../../utils/mappings/categoryMapping";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 

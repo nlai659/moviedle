@@ -1,5 +1,5 @@
 import React from 'react';
-import CategorySelector from './CategorySelector';
+import CategorySelector from '../game/CategorySelector';
 
 const Header: React.FC = () => {
     return (

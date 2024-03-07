@@ -1,6 +1,6 @@
-import categoryMapping from "../util/categoryMapping";
-import { useAppSelector, useAppDispatch } from "./redux/hooks";
-import { setCategory } from "./redux/categorySlice";
+import categoryMapping from "../../utils/mappings/categoryMapping";
+import { useAppSelector, useAppDispatch } from "../redux/hooks";
+import { setCategory } from "../redux/categorySlice";
 
 const CategorySelector = () => {
   const category = useAppSelector((state) => state.category.category);

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { fetchMovieList, fetchTVList } from "../util/apiTMDB";
-import { fetchAnimeList } from "../util/apiMAL";
+import { fetchMovieList, fetchTVList } from "../../services/apiTMDB";
+import { fetchAnimeList } from "../../services/apiMAL";
 import {
   TMDB_suggestedMovieParser,
   TMDB_suggestedTVParser,
   MAL_suggestedAnimeParser,
-} from "../util/suggestedMediaParser";
-import { SuggestedMediaData } from "../types/SuggestedMediaData";
-import { useAppSelector } from "../components/redux/hooks";
-import categoryMapping from "../util/categoryMapping";
+} from "../../utils/dataparsers/suggestedMediaParser";
+import { SuggestedMediaData } from "../../types/SuggestedMediaData";
+import { useAppSelector } from "../redux/hooks";
+import categoryMapping from "../../utils/mappings/categoryMapping";
 
 type SearchBarProps = {
   checkAnswer: (answer: string) => boolean | undefined;

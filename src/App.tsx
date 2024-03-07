@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import Footer from "./components/Footer";
-import Header from "./components/Header";
-import HintArea from "./components/HintArea";
-import SearchBar from "./components/SearchBar";
-import GameOverModal from "./components/GameOverModal";
-import GuessNumber from "./components/GuessNumber";
-import LandingModal from "./components/LandingModal";
-import LoadingSpinner from "./components/LoadingSpinner";
+import Footer from "./components/common/Footer";
+import Header from "./components/common/Header";
+import HintArea from "./components/game/HintArea";
+import SearchBar from "./components/game/SearchBar";
+import GameOverModal from "./components/modal/GameOverModal";
+import GuessNumber from "./components/game/GuessNumber";
+import LandingModal from "./components/modal/LandingModal";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 import ReactConfetti from "react-confetti";
 import {
   fetchMovieCredits,
@@ -15,16 +15,16 @@ import {
   fetchRandomTV,
   fetchTVCredits,
   fetchDailyTV,
-} from "./util/apiTMDB";
+} from "./services/apiTMDB";
 import {
   fetchRandomAnime,
   fetchAnimeDetails,
   fetchAnimeCredits,
-} from "./util/apiMAL";
-import categoryMapping from "./util/categoryMapping";
+} from "./services/apiMAL";
+import categoryMapping from "./utils/mappings/categoryMapping";
 import { useAppSelector } from "./components/redux/hooks";
-import { TMDB_movieParser, TMDB_tvParser, MAL_animeParser } from "./util/hintDataParser";
-import { MediaData } from "./types/mediaData";
+import { TMDB_movieParser, TMDB_tvParser, MAL_animeParser } from "./utils/dataparsers/hintDataParser";
+import { MediaData } from "./types/MediaData";
 
 function App() {
   // Constants

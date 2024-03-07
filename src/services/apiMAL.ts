@@ -1,4 +1,4 @@
-import { getRandomNumber, splitmix32 } from "./random";
+import { getRandomNumber, splitmix32 } from "../utils/random";
 
 const API_CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
 const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
