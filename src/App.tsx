@@ -28,11 +28,12 @@ function App() {
 
   useEffect(() => {
     resetGame();
-    fetchAndSetData(category);
+    setIsDaily(true);
+    fetchAndSetData(category, true);
     configureSettings();
   }, [category]);
 
-  const fetchAndSetData = async (category: number) => {
+  const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
     setMediaData(mediaData);
     setIsLoading(false);
@@ -107,13 +108,8 @@ function App() {
     setIsDaily(false);
     setLandingModalVisible(false);
     resetGame();
+    fetchAndSetData(category, false)
   };
-
-  useEffect(() => {
-    if (gameOver === false && isDaily === false) {
-      fetchAndSetData(category);
-    }
-  }, [gameOver, isDaily]);
 
   const resetGame = () => {
     setIsLoading(true);

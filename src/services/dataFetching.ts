@@ -11,8 +11,6 @@ import {
   fetchAnimeCredits,
 } from "./apiMAL";
 import {
-  fetchDailyMovie,
-  fetchDailyTV,
   fetchMovieCredits,
   fetchRandomMovie,
   fetchRandomTV,
@@ -21,57 +19,57 @@ import {
 
 const fetchData = async (category: number, isDaily: boolean) => {
   let mediaDataResponse, creditDataResponse;
-  let mediaDataParsed: MediaData;
+  let mediaDataParsed: MediaData = {castList: [], genres: [], title: "", synopsis: "", date: "", poster_path: ""};
 
   switch (category) {
     case categoryMapping.MOVIE:
-      if (isDaily) {
-        mediaDataResponse = await fetchDailyMovie();
-      } else {
-        mediaDataResponse = await fetchRandomMovie();
-      }
-      creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
+      while(missingData(mediaDataParsed)) {
+        mediaDataResponse = await fetchRandomMovie(isDaily);
+        creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
 
-      mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
+        mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
+      }
 
       break;
     case categoryMapping.TV:
-      if (isDaily) {
-        mediaDataResponse = await fetchDailyTV();
-      } else {
-        mediaDataResponse = await fetchRandomTV();
-      }
-      creditDataResponse = await fetchTVCredits(mediaDataResponse.id);
+      while (missingData(mediaDataParsed)) {
+        mediaDataResponse = await fetchRandomTV(isDaily);
+        creditDataResponse = await fetchTVCredits(mediaDataResponse.id);
 
-      mediaDataParsed = TMDB_tvParser(mediaDataResponse, creditDataResponse);
+        mediaDataParsed = TMDB_tvParser(mediaDataResponse, creditDataResponse);
+      }
 
       break;
     case categoryMapping.ANIME:
-      mediaDataResponse = await fetchRandomAnime(isDaily);
-      mediaDataResponse = await fetchAnimeDetails(mediaDataResponse.id);
-      creditDataResponse = await fetchAnimeCredits(mediaDataResponse.id);
+      while (missingData(mediaDataParsed)) {
+        mediaDataResponse = await fetchRandomAnime(isDaily);
+        mediaDataResponse = await fetchAnimeDetails(mediaDataResponse.id);
+        creditDataResponse = await fetchAnimeCredits(mediaDataResponse.id);
 
-      console.log(mediaDataResponse);
-      console.log(creditDataResponse);
-
-      mediaDataParsed = MAL_animeParser(mediaDataResponse, creditDataResponse);
+        mediaDataParsed = MAL_animeParser(mediaDataResponse, creditDataResponse);
+      }
 
       break;
 
     default:
-      // Default to movie
-      if (isDaily) {
-        mediaDataResponse = await fetchDailyMovie();
-      } else {
-        mediaDataResponse = await fetchRandomMovie();
-      }
-      creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
+      while(missingData(mediaDataParsed)) {
+        mediaDataResponse = await fetchRandomMovie(isDaily);
+        creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
 
-      mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
+        mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
+      }
 
       break;
   }
   return mediaDataParsed;
 };
+
+// Condition for re-fetching data
+const missingData = (mediaData: MediaData) => {
+  if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList.length < 3) {
+    return true;
+  }
+  return false;
+}
 
 export { fetchData };

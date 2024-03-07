@@ -11,9 +11,9 @@ const CategorySelector = () => {
   };
 
   return (
-    <div>
+    <div className="z-50">
       <label htmlFor="category" className="text-white">Category:</label>
-      <select id="category" value={category} onChange={handleCategoryChange} className="mt-1 block w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      <select id="category" value={category} onChange={handleCategoryChange} className="block w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
         <option value="">Select...</option>
         {
             Object.entries(categoryMapping).map(([category, value]) => {

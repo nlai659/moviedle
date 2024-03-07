@@ -14,36 +14,30 @@ const options = {
   },
 };
 
-const fetchDailyMovie = async () => {
-  // Get the current date
-  const currentDate = new Date();
+const fetchRandomMovie = async (isDaily: boolean) => {
+  let randomYear: number;
+  let randomPage: number;
+  let randomNumber: number;
 
-  // Extract day, month, and year
-  const day = currentDate.getDate();
-  const month = currentDate.getMonth() + 1; // Adding 1 since months are zero-indexed
-  const year = currentDate.getFullYear();
+  if (isDaily) {
+    const currentDate = new Date();
 
-  // Concatenate and parse into a single number
-  const singleNumberFromDate = parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`);
-
-  const randomYear = splitmix32(singleNumberFromDate, 1990, new Date().getFullYear());
-  const randomPage = splitmix32(singleNumberFromDate, 1, 3);
-  const randomNumber = splitmix32(singleNumberFromDate, 0, 19);
-
-  const movieDataResponse = await fetch(
-    `${API_URL}discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&primary_release_year=${randomYear}`,
-    options
-  )
-    .then((res) => res.json())
-    .then((data) => data.results[randomNumber]);
-
-  return movieDataResponse;
-};
-
-const fetchRandomMovie = async () => {
-  const randomYear = getRandomYear();
-  const randomPage = getRandomNumber(1, 3);
-  const randomNumber = getRandomNumber(0, 19);
+    // Extract day, month, and year
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; // Adding 1 since months are zero-indexed
+    const year = currentDate.getFullYear();
+  
+    // Concatenate and parse into a single number
+    const singleNumberFromDate = parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`);
+  
+    randomYear = splitmix32(singleNumberFromDate, 1990, new Date().getFullYear());
+    randomPage = splitmix32(singleNumberFromDate, 1, 3);
+    randomNumber = splitmix32(singleNumberFromDate, 0, 19);
+  } else {
+    randomYear = getRandomYear();
+    randomPage = getRandomNumber(1, 3);
+    randomNumber = getRandomNumber(0, 19);
+  }
 
   const movieDataResponse = await fetch(
     `${API_URL}discover/movie?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&primary_release_year=${randomYear}`,
@@ -82,39 +76,33 @@ const fetchMovieList = async (query: string) => {
   return movieListResponse;
 };
 
-const fetchDailyTV = async () => {
-  // Get the current date
-  const currentDate = new Date();
+const fetchRandomTV = async (isDaily: boolean) => {
+  let randomYear: number;
+  let randomPage: number;
+  let randomNumber: number;
 
-  // Extract day, month, and year
-  const day = currentDate.getDate();
-  const month = currentDate.getMonth() + 1; // Adding 1 since months are zero-indexed
-  const year = currentDate.getFullYear();
+  if (isDaily) {
+    const currentDate = new Date();
 
-  // Concatenate and parse into a single number
-  const singleNumberFromDate = parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`);
-
-  const randomYear = splitmix32(singleNumberFromDate, 1990, new Date().getFullYear());
-  const randomPage = splitmix32(singleNumberFromDate, 1, 3);
-  const randomNumber = splitmix32(singleNumberFromDate, 0, 19);
-
-  const tvDataResponse = await fetch(
-    `${API_URL}discover/tv?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&first_air_date_year=${randomYear}`,
-    options
-  )
-    .then((res) => res.json())
-    .then((data) => data.results[randomNumber]);
-
-  return tvDataResponse;
-};
-
-const fetchRandomTV = async () => {
-  const randomYear = getRandomYear();
-  const randomPage = getRandomNumber(1, 2);
-  const randomNumber = getRandomNumber(0, 19);
+    // Extract day, month, and year
+    const day = currentDate.getDate();
+    const month = currentDate.getMonth() + 1; // Adding 1 since months are zero-indexed
+    const year = currentDate.getFullYear();
+  
+    // Concatenate and parse into a single number
+    const singleNumberFromDate = parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`);
+  
+    randomYear = splitmix32(singleNumberFromDate, 1990, new Date().getFullYear());
+    randomPage = splitmix32(singleNumberFromDate, 1, 3);
+    randomNumber = splitmix32(singleNumberFromDate, 0, 19);
+  } else {
+    randomYear = getRandomYear();
+    randomPage = getRandomNumber(1, 3);
+    randomNumber = getRandomNumber(0, 19);
+  }
 
   const tvDataResponse = await fetch(
-    `${API_URL}discover/tv?language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=${randomPage}&first_air_date_year=${randomYear}`,
+    `${API_URL}discover/tv?language=en-US&sort_by=vote_average.desc&vote_count.gte=200&include_adult=false&include_video=false&page=${randomPage}&first_air_date_year=${randomYear}`,
     options
   )
     .then((res) => res.json())
@@ -152,4 +140,4 @@ const fetchTVList = async (query: string) => {
 
 
 
-export { fetchRandomMovie, fetchMovieCredits, fetchMovieList, fetchDailyMovie, fetchRandomTV, fetchTVCredits, fetchTVList, fetchDailyTV };
+export { fetchRandomMovie, fetchMovieCredits, fetchMovieList, fetchRandomTV, fetchTVCredits, fetchTVList };
