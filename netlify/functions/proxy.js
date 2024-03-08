@@ -10,10 +10,12 @@ const options = {
   },
 };
 
-export const handler = async () => {
+export const handler = async (event) => {
+  const url = event.queryStringParameters.url;
+
   try {
     const response = await fetch(
-      `https://api.myanimelist.net/v2/anime/52991?fields=id,title,main_picture,alternative_titles,start_date,synopsis,genres,start_season,source,rating,pictures`,
+      url,
       options
     );
     return {

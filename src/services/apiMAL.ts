@@ -1,7 +1,7 @@
 import { getRandomNumber, splitmix32 } from "../utils/random";
 
 const API_CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
-const CORS_PROXY = "https://cors-anywhere.herokuapp.com/";
+const CORS_PROXY = "/api/proxy?url=";
 const API_URL = `${CORS_PROXY}https://api.myanimelist.net/v2/`;
 const API_SEARCH_URL =
   `${CORS_PROXY}https://myanimelist.net/search/prefix.json?type=`;

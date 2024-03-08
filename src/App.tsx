@@ -37,14 +37,14 @@ function App() {
   }, [category]);
 
   const testFunction = async () => {
-    const response = await fetch('/api/proxy').then(response => response.json());
-    console.log(response);
+    fetchAndSetData(2, true)
   }
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
-    setMediaData(mediaData);
-    setIsLoading(false);
+    console.log(mediaData)
+    //setMediaData(mediaData);
+    //setIsLoading(false);
   };
 
   // // Configure Settings - daily, numHints, gameWon etc.
