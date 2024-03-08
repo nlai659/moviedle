@@ -67,9 +67,10 @@ const fetchAnimeCredits = async (id: number) => {
 
 const fetchAnimeList = async (input: string) => {
   const animeListResponse = await fetch(
-    `${API_SEARCH_URL}anime&keyword=${input}&v=1`
-  ).then((res) => res.json())
-  .then((data) => data.categories[0].items);
+    encodeURIComponent(`${API_SEARCH_URL}anime&keyword=${input}&v=1`)
+  )
+    .then((res) => res.json())
+    .then((data) => data.categories[0].items);
 
   return animeListResponse;
 }
