@@ -71,8 +71,6 @@ const fetchAnimeList = async (input: string) => {
   ).then((res) => res.json())
   .then((data) => data.categories[0].items);
 
-  console.log(animeListResponse);
-
   return animeListResponse;
 }
 

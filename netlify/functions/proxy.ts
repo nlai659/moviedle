@@ -18,6 +18,9 @@ export const handler = async (event) => {
       url,
       options
     );
+      console.log(url)
+      console.log(response);
+
     return {
       headers: {
         "Content-Type": "application/json",
