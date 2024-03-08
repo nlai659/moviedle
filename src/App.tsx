@@ -27,62 +27,54 @@ function App() {
   const category = useAppSelector((state) => state.category.category);
 
   useEffect(() => {
-    testFunction();
-    
-
-    // resetGame();
-    // setIsDaily(true);
-    // fetchAndSetData(category, true);
-    // configureSettings();
+    resetGame();
+    setIsDaily(true);
+    fetchAndSetData(category, true);
+    configureSettings();
   }, [category]);
-
-  const testFunction = async () => {
-    fetchAndSetData(2, true)
-  }
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
-    console.log(mediaData)
     setMediaData(mediaData);
-    //setIsLoading(false);
+    setIsLoading(false);
   };
 
-  // // Configure Settings - daily, numHints, gameWon etc.
-  // const configureSettings = () => {
-  //   if (!isDaily) return;
+  // Configure Settings - daily, numHints, gameWon etc.
+  const configureSettings = () => {
+    if (!isDaily) return;
 
-  //   const currentDate = new Date();
+    const currentDate = new Date();
 
-  //   // Visited Today
-  //   if (
-  //     localStorage.getItem(`lastDateVisited${category}`) ===
-  //     currentDate.toDateString()
-  //   ) {
-  //     setLandingModalVisible(false);
+    // Visited Today
+    if (
+      localStorage.getItem(`lastDateVisited${category}`) ===
+      currentDate.toDateString()
+    ) {
+      setLandingModalVisible(false);
 
-  //     // load previous game state
-  //     const gameWon = localStorage.getItem(`gameWonDaily${category}`);
-  //     const numHints = parseInt(
-  //       localStorage.getItem(`numHintsDaily${category}`) || "0"
-  //     );
-  //     if (gameWon === "true") {
-  //       setGameOver(true);
-  //       setShowConfetti(true);
-  //     }
-  //     setNumHints(numHints);
-  //     if (numHints > NUM_HINTS) {
-  //       setGameOver(true);
-  //     }
-  //   } else {
-  //     // Hasn't Visited Today
-  //     setIsDaily(true);
-  //     setLandingModalVisible(true);
-  //     localStorage.setItem(
-  //       `lastDateVisited${category}`,
-  //       currentDate.toDateString()
-  //     );
-  //   }
-  // };
+      // load previous game state
+      const gameWon = localStorage.getItem(`gameWonDaily${category}`);
+      const numHints = parseInt(
+        localStorage.getItem(`numHintsDaily${category}`) || "0"
+      );
+      if (gameWon === "true") {
+        setGameOver(true);
+        setShowConfetti(true);
+      }
+      setNumHints(numHints);
+      if (numHints > NUM_HINTS) {
+        setGameOver(true);
+      }
+    } else {
+      // Hasn't Visited Today
+      setIsDaily(true);
+      setLandingModalVisible(true);
+      localStorage.setItem(
+        `lastDateVisited${category}`,
+        currentDate.toDateString()
+      );
+    }
+  };
 
   const checkAnswer = (answer: string) => {
     // Correct Answer
