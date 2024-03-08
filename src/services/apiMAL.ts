@@ -66,14 +66,15 @@ const fetchAnimeCredits = async (id: number) => {
 }
 
 const fetchAnimeList = async (input: string) => {
-  const animeListResponse = await fetch(
-    encodeURIComponent(`${API_SEARCH_URL}anime&keyword=${input}&v=1`)
-  )
+  const encodedURL = `${API_SEARCH_URL}anime&keyword=${encodeURIComponent(input)}&v=1`;
+  
+  const animeListResponse = await fetch(encodedURL)
     .then((res) => res.json())
     .then((data) => data.categories[0].items);
 
   return animeListResponse;
 }
+
 
 
 export { fetchRandomAnime, fetchAnimeDetails, fetchAnimeCredits, fetchAnimeList };
