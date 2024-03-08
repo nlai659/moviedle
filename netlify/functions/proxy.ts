@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 const API_CLIENT_ID = process.env.VITE_MAL_CLIENT_ID;
 
-const options = {
+const options: any = {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
