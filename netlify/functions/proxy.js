@@ -1,9 +1,8 @@
-import fetch from "node-fetch";
-
 export const handler = async () => {
-  return {
-	statusCode: 200,
-	body: "Hello, World!",
-  };
-  }
-
+	return {
+		statusCode: 200,
+		body: JSON.stringify({
+			message: 'This is what will be returned!'
+		})
+	}
+}
