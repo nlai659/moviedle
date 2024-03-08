@@ -43,7 +43,7 @@ function App() {
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
     console.log(mediaData)
-    //setMediaData(mediaData);
+    setMediaData(mediaData);
     //setIsLoading(false);
   };
 
