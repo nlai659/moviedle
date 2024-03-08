@@ -1,11 +1,12 @@
 import fetch from "node-fetch";
 
 export const handler = async () => {
-  const res = await fetch("https://catfact.ninja/fact").then((res) => ({
-	headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+  const res = await fetch("https://catfact.ninja/fact").then((res) => (res.json()));
+  console.log(res);
+
+  return {
 	statusCode: 200,
-	body: JSON.stringify(res),
-  }));
-  return res;
-}
+	body: "Hello, World!",
+  };
+  }
 
