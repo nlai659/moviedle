@@ -1,5 +1,4 @@
 import fetch from "node-fetch";
-const API_CLIENT_ID = import.meta.env.VITE_API_CLIENT_ID;
 
 const options = {
   method: "GET",
