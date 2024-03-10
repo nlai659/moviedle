@@ -1,7 +1,7 @@
 import { getRandomNumber, splitmix32 } from "../utils/random";
 
 const API_URL = "https://api.jikan.moe/v4/";
-const API_SEARCH_URL = `https://myanimelist.net/search/prefix.json?type=`;
+const API_SEARCH_URL = `https://api.jikan.moe/v4/manga?order_by=popularity&page=1&q=`;
 
 const options = {
   method: "GET",
@@ -56,8 +56,7 @@ const fetchMangaCharacters = async (id: number) => {
 
 const fetchMangaSearch = async (query: string) => {
     const searchResults = await fetch(
-        `${API_SEARCH_URL}manga&keyword=${query}&v=1`,
-        options
+        `${API_SEARCH_URL}${query}`,
     ).then((res) => res.json());
 
     return searchResults;

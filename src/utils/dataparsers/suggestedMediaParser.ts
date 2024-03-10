@@ -46,4 +46,16 @@ const MAL_suggestedAnimeParser = (data: any[]): SuggestedMediaData[] => {
     return animeList;
 }
 
-export { TMDB_suggestedMovieParser, TMDB_suggestedTVParser, MAL_suggestedAnimeParser };
+const MAL_suggestedMangaParser = (data: any[]): SuggestedMediaData[] => {
+    const mangaList: SuggestedMediaData[] = data.map(
+        (manga: any) => ({
+            id: manga.mal_id,
+            title: manga.title,
+            img_path: manga.images.webp.image_url,
+        })
+    );
+
+    return mangaList;
+}
+
+export { TMDB_suggestedMovieParser, TMDB_suggestedTVParser, MAL_suggestedAnimeParser, MAL_suggestedMangaParser };

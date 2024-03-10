@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { fetchMovieList, fetchTVList } from "../../services/apiTMDB";
 import { fetchAnimeList } from "../../services/apiMAL";
+import { fetchMangaSearch } from "../../services/apiJikan";
 import {
   TMDB_suggestedMovieParser,
   TMDB_suggestedTVParser,
   MAL_suggestedAnimeParser,
+  MAL_suggestedMangaParser
 } from "../../utils/dataparsers/suggestedMediaParser";
 import { SuggestedMediaData } from "../../types/SuggestedMediaData";
 import { useAppSelector } from "../redux/hooks";
@@ -89,6 +91,11 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       case categoryMapping.ANIME:
         uniqueMedia = await fetchAnimeList(input).then((data) =>
         MAL_suggestedAnimeParser(data)
+        );
+        break;
+      case categoryMapping.MANGA:
+        uniqueMedia = await fetchMangaSearch(input).then((data) =>
+        MAL_suggestedMangaParser(data.data)
         );
         break;
       default:
