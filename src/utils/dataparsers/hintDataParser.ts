@@ -105,4 +105,35 @@ const MAL_animeParser = (animeData: any, creditData: any): MediaData => {
     }
 }
 
-export { TMDB_movieParser, TMDB_tvParser, MAL_animeParser }
+const JIKAN_mangaParser = (mangaData: any, creditData: any): MediaData => {
+    const castList: CastData[] = [];
+
+    for (let i = 0; i < 3; i++) {
+        if (creditData[i]) {
+            castList.push({
+                name: `${creditData[i].character.name}`,
+                role: creditData[i].character.role,
+                img_path: creditData[i].character.images.webp.image_url
+            });
+        }
+    }
+
+    const genres: string[] = [];
+    for (let i = 0; i < mangaData.genres.length; i++) {
+        genres.push(mangaData.genres[i].name);
+    }
+
+    const date = mangaData.published.string;
+
+    return {
+        title: mangaData.title,
+        synopsis: mangaData.synopsis,
+        genres: genres,
+        date: date,
+        castList: castList,
+        poster_path: mangaData.images.webp.large_image_url,
+        link: `https://myanimelist.net/manga/${mangaData.mal_id}`
+    }
+}
+
+export { TMDB_movieParser, TMDB_tvParser, MAL_animeParser, JIKAN_mangaParser }

@@ -3,6 +3,7 @@ import {
   TMDB_movieParser,
   TMDB_tvParser,
   MAL_animeParser,
+  JIKAN_mangaParser
 } from "../utils/dataparsers/hintDataParser";
 import categoryMapping from "../utils/mappings/categoryMapping";
 import {
@@ -16,6 +17,11 @@ import {
   fetchRandomTV,
   fetchTVCredits,
 } from "./apiTMDB";
+import {
+  fetchMangaCharacters,
+  fetchRandomManga,
+  fetchMangaSearch,
+} from "./apiJikan"
 
 const fetchData = async (category: number, isDaily: boolean) => {
   let mediaDataResponse, creditDataResponse;
@@ -47,6 +53,15 @@ const fetchData = async (category: number, isDaily: boolean) => {
         creditDataResponse = await fetchAnimeCredits(mediaDataResponse.id);
 
         mediaDataParsed = MAL_animeParser(mediaDataResponse, creditDataResponse);
+      }
+
+      break;
+    case categoryMapping.MANGA:
+      while (missingData(mediaDataParsed)) {
+        mediaDataResponse = await fetchRandomManga(isDaily);
+        creditDataResponse = await fetchMangaCharacters(mediaDataResponse.mal_id);
+
+        mediaDataParsed = JIKAN_mangaParser(mediaDataResponse, creditDataResponse);
       }
 
       break;
