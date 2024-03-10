@@ -20,7 +20,6 @@ import {
 import {
   fetchMangaCharacters,
   fetchRandomManga,
-  fetchMangaSearch,
 } from "./apiJikan"
 
 const fetchData = async (category: number, isDaily: boolean) => {
