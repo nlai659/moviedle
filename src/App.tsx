@@ -112,6 +112,7 @@ function App() {
   };
 
   const resetGame = () => {
+    setMediaData({} as MediaData);
     setIsLoading(true);
     setNumHints(0);
     setGameOver(false);
