@@ -11,6 +11,9 @@ import ReactConfetti from "react-confetti";
 import { useAppSelector } from "./components/redux/hooks";
 import { MediaData } from "./types/MediaData";
 import { fetchData } from "./services/dataFetching";
+import CategorySelectorHamburger from "./components/game/CategorySelectorHamburger";
+import { useAppDispatch } from "./components/redux/hooks";
+import { setDaily } from "./components/redux/dailySlice";
 
 function App() {
   // Constants
@@ -22,16 +25,16 @@ function App() {
   const [mediaData, setMediaData] = useState({} as MediaData);
   const [numHints, setNumHints] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [isDaily, setIsDaily] = useState(true);
 
+  const dispatch = useAppDispatch();
   const category = useAppSelector((state) => state.category.category);
+  const daily = useAppSelector((state) => state.daily.daily);
 
   useEffect(() => {
     resetGame();
-    setIsDaily(true);
-    fetchAndSetData(category, true);
+    fetchAndSetData(category, daily);
     configureSettings();
-  }, [category]);
+  }, [category, daily]);
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
@@ -41,13 +44,13 @@ function App() {
 
   // Configure Settings - daily, numHints, gameWon etc.
   const configureSettings = () => {
-    if (!isDaily) return;
+    if (!daily) return;
 
     const currentDate = new Date();
 
     // Visited Today
     if (
-      localStorage.getItem(`lastDateVisited${category}`) ===
+      localStorage.getItem(`lastDateVisited0`) ===
       currentDate.toDateString()
     ) {
       setLandingModalVisible(false);
@@ -67,7 +70,6 @@ function App() {
       }
     } else {
       // Hasn't Visited Today
-      setIsDaily(true);
       setLandingModalVisible(true);
       localStorage.setItem(
         `lastDateVisited${category}`,
@@ -79,9 +81,11 @@ function App() {
   const checkAnswer = (answer: string) => {
     // Correct Answer
     if (answer.toLowerCase() === mediaData.title.toLowerCase()) {
+      localStorage.setItem(`gameOver${category}`, "true");
       setGameOver(true);
       setShowConfetti(true);
-      if (isDaily) {
+      if (daily) {
+        console.log("setting gameWonDaily");
         localStorage.setItem(`gameWonDaily${category}`, "true");
       }
       return true;
@@ -89,15 +93,17 @@ function App() {
     // Incorrect Answer
     else {
       setNumHints((prevNumHints) => prevNumHints + 1);
-      if (isDaily) {
+      if (daily) {
         localStorage.setItem(
           `numHintsDaily${category}`,
           (numHints + 1).toString()
         );
+        console.log(`numHintsDaily${category}`);
       }
 
       // Out of Hints
       if (numHints + 1 > NUM_HINTS) {
+        localStorage.setItem(`gameOver${category}`, "true");
         setGameOver(true);
       }
       return false;
@@ -105,8 +111,7 @@ function App() {
   };
 
   const onRandomMovie = () => {
-    setIsDaily(false);
-    setLandingModalVisible(false);
+    dispatch(setDaily(false))
     resetGame();
     fetchAndSetData(category, false)
   };
@@ -119,26 +124,22 @@ function App() {
     setShowConfetti(false);
   };
 
-  const onPlayDaily = () => {
-    setLandingModalVisible(false);
-  };
-
   return (
-    <div className="flex flex-col min-h-screen bg-gray-800">
+    <div className="flex flex-col min-h-screen bg-zinc-900">
       {/* Confetti */}
       {showConfetti && <ReactConfetti recycle={false} numberOfPieces={500} />}
 
       {/* Landing Modal */}
       <LandingModal
         isVisible={landingModalVisible}
-        onPlayDaily={onPlayDaily}
-        onRandomMovie={onRandomMovie}
+        setIsVisible={setLandingModalVisible}
+        setModalVisible={setLandingModalVisible}
       />
 
       {/* Game Over Modal */}
       <GameOverModal
         isVisible={gameOver}
-        isDaily={isDaily}
+        isDaily={daily}
         onRandomMovie={onRandomMovie}
         gameWin={numHints <= NUM_HINTS}
         movieName={mediaData.title}
@@ -146,7 +147,10 @@ function App() {
         link={mediaData.link}
       />
 
+      <div className="flex flex-row justify-between">
       <Header />
+      <CategorySelectorHamburger/>
+      </div>
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
         {isLoading ? (
           <LoadingSpinner />

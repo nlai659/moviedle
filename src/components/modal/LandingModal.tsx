@@ -1,36 +1,73 @@
+import { useState } from "react";
+import CategorySelector from "./CategorySelector";
+
 type LandingModalProps = {
-    isVisible: boolean;
-    onPlayDaily: () => void;
-    onRandomMovie: () => void;
+  isVisible: boolean;
+  setIsVisible: (isVisible: boolean) => void;
+  setModalVisible: (isVisible: boolean) => void;
 };
 
-const LandingModal = ({ isVisible, onPlayDaily, onRandomMovie }: LandingModalProps) => {
-    return (
-        <div className={`z-50 fixed inset-0 flex justify-center items-center ${isVisible ? '' : 'hidden'}`}>
-            <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-            <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative">
-                <h2 className="text-2xl font-bold text-white mb-4">Welcome to Moviedle!</h2>
-                <p className="text-white mb-4">
-                    The game is simple, you will be given a movie synopsis and you have to guess the movie name.
-                    You have 5 hints to help you out. If you run out of hints, you lose.
-                </p>
-                <div className="flex justify-between">
-                    <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
-                        onClick={onPlayDaily}
-                        >
-                        Play Daily!
-                    </button>
-                    <button
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
-                        onClick={onRandomMovie}
-                        >
-                        Random
-                    </button>
-                </div>
+const LandingModal = ({
+  isVisible,
+  setIsVisible,
+  setModalVisible,
+}: LandingModalProps) => {
+  const [animateFadeOut, setAnimateFadeOut] = useState(false);
+
+  const onAnimationEnd = () => {
+    setIsVisible(false);
+    setAnimateFadeOut(false);
+  };
+
+  return (
+    <>
+      {isVisible && (
+        <div
+          className={`z-50 fixed inset-0 flex justify-center items-center text-white ${
+            isVisible && animateFadeOut ? "animate-fade animate-reverse" : ""
+          }`}
+          onAnimationEnd={onAnimationEnd}
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+          <div className="bg-zinc-900 rounded-3xl shadow-md p-6 max-w-md relative">
+            <div className="flex justify-end">
+              <button
+                onClick={() => setModalVisible(false)}
+                className="focus:outline-none absolute top-4 right-4 text-white"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6 text-zinc-400 hover:text-zinc-200 transition duration-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
             </div>
+            <h2 className="mb-6 text-4xl font-extrabold leading-none tracking-tight text-center text-white">
+              Synopdle
+            </h2>
+            <p className="text-white mb-6">
+              Given the synopsis, can you guess the media?
+            </p>
+            <hr className="border-t-2 border-gray-300 mb-6" />
+            <div>
+              <div className="flex flex-col">
+                <CategorySelector setModalVisible={setModalVisible} />
+              </div>
+            </div>
+          </div>
         </div>
-    );
+      )}
+    </>
+  );
 };
 
 export default LandingModal;

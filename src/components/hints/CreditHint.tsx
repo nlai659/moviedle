@@ -21,7 +21,7 @@ const CreditHint: React.FC<CreditHintProps> = ({
     };
 
     return (
-        <div className="bg-gray-700 rounded-lg shadow-md p-2 m-1">
+        <div className="bg-zinc-800 rounded-3xl shadow-md p-2 m-1">
             <p className="text-white font-bold ml-1">Cast:</p>
             <div className="flex flex-row items-center">
                 <img

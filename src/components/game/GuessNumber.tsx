@@ -11,8 +11,8 @@ const GuessNumber = ({ numHints, numHintsUsed }: GuessNumberProps) => {
 
   return (
     <div>
-      <p className="text-center text-gray-600 mb-1">
-        {numHintsUsed} / {numHints} hints used
+      <p className="text-center text-zinc-600 mb-1">
+        {numHintsUsed} / {numHints} Hints
       </p>
     </div>
   );
