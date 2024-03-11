@@ -60,6 +60,8 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     // Check Correct Answer
     const answer = checkAnswer(searchTerm);
     setSearchTerm("");
+    setSuggestedMediaList([]);
+    setSelectedSuggestionIndex(-1);
     
     // Shake if incorrect
     if (!answer) {
@@ -72,6 +74,9 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
 
   const handleSkip = () => {
     checkAnswer("");
+    setSearchTerm("");
+    setSuggestedMediaList([]);
+    setSelectedSuggestionIndex(-1);
   };
 
   const fetchAndSetSuggestedMediaList = async (input: string) => {
@@ -123,15 +128,15 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   return (
     <div className="relative">
       {suggestedMediaList.length > 0 && (
-        <div className="absolute bottom-36 w-full max-w-screen-md max-h-36 overflow-auto bg-gray-800 rounded-lg shadow-md border border-gray-700">
+        <div className="absolute bottom-36 w-full max-w-screen-md max-h-36 overflow-auto bg-zinc-800 rounded-3xl shadow-md border border-zinc-700">
           {suggestedMediaList.map(
             (media: SuggestedMediaData, index: number) => (
               <div
                 key={media.title}
-                className={`flex items-center justify-between px-4 py-2 cursor-pointer text-white transition duration-300 rounded-lg ${
+                className={`flex items-center justify-between px-4 py-2 cursor-pointer text-white transition duration-300 ${
                   index === selectedSuggestionIndex
-                    ? "bg-gray-700"
-                    : "hover:bg-gray-700"
+                    ? "bg-zinc-700"
+                    : "hover:bg-zinc-700"
                 }`}
                 onClick={() => handleSuggestionClick(media.title)}
               >
@@ -150,27 +155,27 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       )}
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-700 rounded-lg shadow-md p-2 flex flex-wrap"
+        className="bg-zinc-800 rounded-3xl shadow-md p-2 flex flex-wrap"
       >
         <input
           type="text"
-          placeholder="Search for a movie"
+          placeholder="Search..."
           value={searchTerm}
           onChange={(e) => onInputChange(e)}
-          className={`w-full p-4 bg-gray-800 text-white rounded-lg focus:outline-none focus:ring focus:border-blue-500 ${
+          className={`w-full p-4 bg-zinc-900 text-white rounded-3xl focus:outline-none focus:ring-zinc-500 focus:border-zinc-500 ${
             shake ? "animate-shake" : ""
           }`}
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white p-4 w-5/6 mt-2 rounded-lg shadow-md hover:bg-blue-600 transition duration-300"
+          className="p-4 w-5/6 mt-2 text-white bg-emerald-700 hover:bg-emerald-800 font-medium rounded-3xl text-sm transition duration-300"
         >
           Submit
         </button>
         <button
           type="button"
           onClick={handleSkip}
-          className="bg-red-500 text-white p-4 mt-2 rounded-lg shadow-md hover:bg-red-600 transition duration-300 ml-2 flex-grow"
+          className="p-4 mt-2 ml-2 flex-grow text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
         >
           Skip
         </button>

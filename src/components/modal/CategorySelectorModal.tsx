@@ -1,37 +1,23 @@
-import { useState } from "react";
-import { setCategory } from "../redux/categorySlice";
+import categoryMapping from "../../utils/mappings/categoryMapping";
 import { useAppDispatch } from "../redux/hooks";
-import categoryMapping  from "../../utils/mappings/categoryMapping";
+import { setCategory } from "../redux/categorySlice";
 
-type LandingModalProps = {
+type CategorySelectorModalProps = {
   isVisible: boolean;
-  setIsVisible: (isVisible: boolean) => void;
   setModalVisible: (isVisible: boolean) => void;
   setIsDaily: (isDaily: boolean) => void;
 };
 
-const LandingModal = ({
-  isVisible,
-  setIsVisible,
-  setModalVisible,
-  setIsDaily,
-}: LandingModalProps) => {
-  const [animateFadeOut, setAnimateFadeOut] = useState(false);
-
-  const onAnimationEnd = () => {
-    setIsVisible(false);
-    setAnimateFadeOut(false);
-  };
-
+const CategorySelectorModal = ({ isVisible, setModalVisible, setIsDaily }: CategorySelectorModalProps) => {
   const dispatch = useAppDispatch();
   const categoryStrings = Object.keys(categoryMapping).map(
     (key) => key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()
   );
 
   const handleCategoryChange = (index: number) => {
+    setIsDaily(false);
     dispatch(setCategory(index));
     setModalVisible(false);
-    setIsDaily(false);
   };
 
   const handleCategoryChangeDaily = (index: number) => {
@@ -40,27 +26,16 @@ const LandingModal = ({
     setModalVisible(false);
   };
 
+
   return (
-    <>
-      {isVisible && (
-        <div
-          className={`z-50 fixed inset-0 flex justify-center items-center text-white ${
-            isVisible && animateFadeOut ? "animate-fade animate-reverse" : ""
-          }`}
-          onAnimationEnd={onAnimationEnd}
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-          <div className="bg-zinc-900 rounded-3xl shadow-md p-6 max-w-md relative">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              Welcome to Synopdle!
-            </h2>
-            <p className="text-white mb-4">
-              The game is simple, you will be given a movie synopsis and you
-              have to guess the movie name. You have 5 hints to help you out. If
-              you run out of hints, you lose.
-            </p>
-            <div>
-            <div className="flex flex-col">
+    <div
+      className={`z-50 fixed inset-0 flex justify-center items-center ${
+        isVisible ? "" : "hidden"
+      }`}
+    >
+      <div className="fixed inset-0 bg-black bg-opacity-50"></div>
+      <div className="bg-zinc-800 rounded-3xl shadow-md p-6 max-w-md min-w-md w-2/3 relative z-50 text-white">
+        <div className="flex flex-col">
           <h1 className=" font-bold text-xl mb-2">Category:</h1>
           {categoryStrings.map((category, index) => (
             <div key={index} className="flex justify-between items-center">
@@ -86,13 +61,9 @@ const LandingModal = ({
             </div>
           ))}
         </div>
-              
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 };
 
-export default LandingModal;
+export default CategorySelectorModal;

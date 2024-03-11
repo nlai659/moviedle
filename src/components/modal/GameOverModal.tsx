@@ -28,7 +28,7 @@ const GameOverModal = ({ isVisible, isDaily, onRandomMovie, gameWin, movieName, 
         }`}
       >
         <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-        <div className="bg-gray-700 rounded-lg shadow-md p-6 max-w-md relative z-50 animate-jump-in">
+        <div className="bg-zinc-800 rounded-3xl shadow-md p-6 max-w-md relative z-50 animate-jump-in">
           {modalContent}
           {isDaily && <DailyCountDown />}
           <img
@@ -51,10 +51,10 @@ const GameOverModal = ({ isVisible, isDaily, onRandomMovie, gameWin, movieName, 
 
           <div className="flex justify-between">
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-600 transition duration-300"
+              className="p-2 flex-grow text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-full transition duration-300 border border-zinc-700"
               onClick={onRandomMovie}
             >
-              Play Random!
+              Play Endless
             </button>
           </div>
         </div>

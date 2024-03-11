@@ -19,7 +19,7 @@ const DailyCountDown = () => {
 
     return (
         <div>
-            <p className="text-white">Time until next daily movie: {hours}h {minutes}m {seconds}s</p>
+            <p className="text-white">Time until next daily: {hours}h {minutes}m {seconds}s</p>
         </div>
     );
 }

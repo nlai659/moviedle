@@ -11,6 +11,8 @@ import ReactConfetti from "react-confetti";
 import { useAppSelector } from "./components/redux/hooks";
 import { MediaData } from "./types/MediaData";
 import { fetchData } from "./services/dataFetching";
+import CategorySelectorModal from "./components/modal/CategorySelectorModal";
+import CategorySelector from "./components/game/CategorySelector";
 
 function App() {
   // Constants
@@ -47,7 +49,7 @@ function App() {
 
     // Visited Today
     if (
-      localStorage.getItem(`lastDateVisited${category}`) ===
+      localStorage.getItem(`lastDateVisited0`) ===
       currentDate.toDateString()
     ) {
       setLandingModalVisible(false);
@@ -82,6 +84,7 @@ function App() {
       setGameOver(true);
       setShowConfetti(true);
       if (isDaily) {
+        console.log("setting gameWonDaily");
         localStorage.setItem(`gameWonDaily${category}`, "true");
       }
       return true;
@@ -94,6 +97,7 @@ function App() {
           `numHintsDaily${category}`,
           (numHints + 1).toString()
         );
+        console.log(`numHintsDaily${category}`);
       }
 
       // Out of Hints
@@ -119,7 +123,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-800">
+    <div className="flex flex-col min-h-screen bg-zinc-900">
       {/* Confetti */}
       {showConfetti && <ReactConfetti recycle={false} numberOfPieces={500} />}
 
@@ -127,7 +131,8 @@ function App() {
       <LandingModal
         isVisible={landingModalVisible}
         setIsVisible={setLandingModalVisible}
-        onRandomMovie={onRandomMovie}
+        setModalVisible={setLandingModalVisible}
+        setIsDaily={setIsDaily}
       />
 
       {/* Game Over Modal */}
@@ -141,7 +146,10 @@ function App() {
         link={mediaData.link}
       />
 
+      <div className="flex flex-row justify-between">
       <Header />
+      <CategorySelector setIsDaily={setIsDaily} />
+      </div>
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
         {isLoading ? (
           <LoadingSpinner />

@@ -1,29 +1,37 @@
-import categoryMapping from "../../utils/mappings/categoryMapping";
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { setCategory } from "../redux/categorySlice";
+import CategorySelectorModal from "../modal/CategorySelectorModal"
+import { useState } from "react";
 
-const CategorySelector = () => {
-  const category = useAppSelector((state) => state.category.category);
-  const dispatch = useAppDispatch();
+type CategorySelectorProps = {
+  setIsDaily: (isDaily: boolean) => void;
+};
 
-  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setCategory(Number(event.target.value)));  
-  };
+const CategorySelector = ({setIsDaily}: CategorySelectorProps) => {
+  const [modalVisible, setModalVisible] = useState(false);
 
   return (
-    <div className="z-50">
-      <label htmlFor="category" className="text-white">Category:</label>
-      <select id="category" value={category} onChange={handleCategoryChange} className="block w-full dark:bg-gray-700 dark:text-white dark:border-gray-600 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-        <option value="">Select...</option>
-        {
-            Object.entries(categoryMapping).map(([category, value]) => {
-                return <option value={value} key={value}>{category}</option>;
-            })
-        }
-      </select>
+    <div className="z-50 p-4">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-8 w-8 cursor-pointer text-white hover:text-zinc-500 transition duration-300"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        onClick={() => setModalVisible(true)}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M4 6h16M4 12h16m-7 6h7"
+        />
+      </svg>
+      <CategorySelectorModal
+        isVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        setIsDaily={setIsDaily}
+      />
     </div>
   );
 };
 
 export default CategorySelector;
-    
