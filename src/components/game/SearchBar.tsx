@@ -175,9 +175,24 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
         <button
           type="button"
           onClick={handleSkip}
-          className="p-4 mt-2 ml-2 flex-grow text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
+          className="inline-flex items-center justify-center p-4 mt-2 ml-2 flex-grow text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
         >
           Skip
+          <svg
+            className="w-3 h-3 ml-2"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 14 10"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 5h12m0 0L9 1m4 4L9 9"
+            />
+          </svg>
         </button>
       </form>
     </div>

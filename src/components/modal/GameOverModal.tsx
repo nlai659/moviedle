@@ -51,7 +51,7 @@ const GameOverModal = ({ isVisible, isDaily, onRandomMovie, gameWin, movieName, 
 
           <div className="flex justify-between">
             <button
-              className="p-2 flex-grow text-white bg-sky-700 hover:bg-sky-800 font-medium rounded-full transition duration-300 border border-sky-700"
+              className="p-2 flex-grow text-white bg-emerald-700 hover:bg-emerald-800 font-medium rounded-3xl text-sm transition duration-300"
               onClick={onRandomMovie}
             >
               Play Endless

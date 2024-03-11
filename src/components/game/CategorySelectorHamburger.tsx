@@ -1,14 +1,14 @@
 import CategorySelectorModal from "../modal/CategorySelectorModal"
 import { useState } from "react";
 
-const CategorySelector = () => {
+const CategorySelectorHamburger = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <div className="z-50 p-4">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        className="h-8 w-8 cursor-pointer text-white hover:text-zinc-500 transition duration-300"
+        className="h-8 w-8 cursor-pointer text-zinc-400 hover:text-zinc-200 transition duration-300"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
@@ -29,4 +29,4 @@ const CategorySelector = () => {
   );
 };
 
-export default CategorySelector;
+export default CategorySelectorHamburger;

@@ -11,7 +11,7 @@ import ReactConfetti from "react-confetti";
 import { useAppSelector } from "./components/redux/hooks";
 import { MediaData } from "./types/MediaData";
 import { fetchData } from "./services/dataFetching";
-import CategorySelector from "./components/game/CategorySelector";
+import CategorySelectorHamburger from "./components/game/CategorySelectorHamburger";
 import { useAppDispatch } from "./components/redux/hooks";
 import { setDaily } from "./components/redux/dailySlice";
 
@@ -81,6 +81,7 @@ function App() {
   const checkAnswer = (answer: string) => {
     // Correct Answer
     if (answer.toLowerCase() === mediaData.title.toLowerCase()) {
+      localStorage.setItem(`gameOver${category}`, "true");
       setGameOver(true);
       setShowConfetti(true);
       if (daily) {
@@ -102,6 +103,7 @@ function App() {
 
       // Out of Hints
       if (numHints + 1 > NUM_HINTS) {
+        localStorage.setItem(`gameOver${category}`, "true");
         setGameOver(true);
       }
       return false;
@@ -147,7 +149,7 @@ function App() {
 
       <div className="flex flex-row justify-between">
       <Header />
-      <CategorySelector/>
+      <CategorySelectorHamburger/>
       </div>
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
         {isLoading ? (
