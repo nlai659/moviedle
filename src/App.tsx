@@ -106,7 +106,6 @@ function App() {
 
   const onRandomMovie = () => {
     setIsDaily(false);
-    setLandingModalVisible(false);
     resetGame();
     fetchAndSetData(category, false)
   };
@@ -119,10 +118,6 @@ function App() {
     setShowConfetti(false);
   };
 
-  const onPlayDaily = () => {
-    setLandingModalVisible(false);
-  };
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-800">
       {/* Confetti */}
@@ -131,7 +126,7 @@ function App() {
       {/* Landing Modal */}
       <LandingModal
         isVisible={landingModalVisible}
-        onPlayDaily={onPlayDaily}
+        setIsVisible={setLandingModalVisible}
         onRandomMovie={onRandomMovie}
       />
 
