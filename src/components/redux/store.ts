@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import categoryReducer from './categorySlice'
+import dailyReducer from './dailySlice'
 
 const store = configureStore({
   reducer: {
     category: categoryReducer,
+    daily: dailyReducer,
   },
 })
 

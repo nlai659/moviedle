@@ -2,19 +2,18 @@ import { useState } from "react";
 import { setCategory } from "../redux/categorySlice";
 import { useAppDispatch } from "../redux/hooks";
 import categoryMapping  from "../../utils/mappings/categoryMapping";
+import { setDaily } from "../redux/dailySlice";
 
 type LandingModalProps = {
   isVisible: boolean;
   setIsVisible: (isVisible: boolean) => void;
   setModalVisible: (isVisible: boolean) => void;
-  setIsDaily: (isDaily: boolean) => void;
 };
 
 const LandingModal = ({
   isVisible,
   setIsVisible,
   setModalVisible,
-  setIsDaily,
 }: LandingModalProps) => {
   const [animateFadeOut, setAnimateFadeOut] = useState(false);
 
@@ -29,13 +28,13 @@ const LandingModal = ({
   );
 
   const handleCategoryChange = (index: number) => {
+    dispatch(setDaily(false))
     dispatch(setCategory(index));
     setModalVisible(false);
-    setIsDaily(false);
   };
 
   const handleCategoryChangeDaily = (index: number) => {
-    setIsDaily(true);
+    dispatch(setDaily(true))
     dispatch(setCategory(index));
     setModalVisible(false);
   };

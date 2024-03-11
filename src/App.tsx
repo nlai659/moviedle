@@ -12,6 +12,8 @@ import { useAppSelector } from "./components/redux/hooks";
 import { MediaData } from "./types/MediaData";
 import { fetchData } from "./services/dataFetching";
 import CategorySelector from "./components/game/CategorySelector";
+import { useAppDispatch } from "./components/redux/hooks";
+import { setDaily } from "./components/redux/dailySlice";
 
 function App() {
   // Constants
@@ -23,16 +25,16 @@ function App() {
   const [mediaData, setMediaData] = useState({} as MediaData);
   const [numHints, setNumHints] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [isDaily, setIsDaily] = useState(true);
 
+  const dispatch = useAppDispatch();
   const category = useAppSelector((state) => state.category.category);
+  const daily = useAppSelector((state) => state.daily.daily);
 
   useEffect(() => {
     resetGame();
-    setIsDaily(true);
-    fetchAndSetData(category, true);
+    fetchAndSetData(category, daily);
     configureSettings();
-  }, [category]);
+  }, [category, daily]);
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
@@ -42,7 +44,7 @@ function App() {
 
   // Configure Settings - daily, numHints, gameWon etc.
   const configureSettings = () => {
-    if (!isDaily) return;
+    if (!daily) return;
 
     const currentDate = new Date();
 
@@ -68,7 +70,6 @@ function App() {
       }
     } else {
       // Hasn't Visited Today
-      setIsDaily(true);
       setLandingModalVisible(true);
       localStorage.setItem(
         `lastDateVisited${category}`,
@@ -82,7 +83,7 @@ function App() {
     if (answer.toLowerCase() === mediaData.title.toLowerCase()) {
       setGameOver(true);
       setShowConfetti(true);
-      if (isDaily) {
+      if (daily) {
         console.log("setting gameWonDaily");
         localStorage.setItem(`gameWonDaily${category}`, "true");
       }
@@ -91,7 +92,7 @@ function App() {
     // Incorrect Answer
     else {
       setNumHints((prevNumHints) => prevNumHints + 1);
-      if (isDaily) {
+      if (daily) {
         localStorage.setItem(
           `numHintsDaily${category}`,
           (numHints + 1).toString()
@@ -108,7 +109,7 @@ function App() {
   };
 
   const onRandomMovie = () => {
-    setIsDaily(false);
+    dispatch(setDaily(false))
     resetGame();
     fetchAndSetData(category, false)
   };
@@ -131,13 +132,12 @@ function App() {
         isVisible={landingModalVisible}
         setIsVisible={setLandingModalVisible}
         setModalVisible={setLandingModalVisible}
-        setIsDaily={setIsDaily}
       />
 
       {/* Game Over Modal */}
       <GameOverModal
         isVisible={gameOver}
-        isDaily={isDaily}
+        isDaily={daily}
         onRandomMovie={onRandomMovie}
         gameWin={numHints <= NUM_HINTS}
         movieName={mediaData.title}
@@ -147,7 +147,7 @@ function App() {
 
       <div className="flex flex-row justify-between">
       <Header />
-      <CategorySelector setIsDaily={setIsDaily} />
+      <CategorySelector/>
       </div>
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
         {isLoading ? (

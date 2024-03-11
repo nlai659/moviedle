@@ -1,27 +1,27 @@
 import categoryMapping from "../../utils/mappings/categoryMapping";
 import { useAppDispatch } from "../redux/hooks";
 import { setCategory } from "../redux/categorySlice";
+import { setDaily } from "../redux/dailySlice";
 
 type CategorySelectorModalProps = {
   isVisible: boolean;
   setModalVisible: (isVisible: boolean) => void;
-  setIsDaily: (isDaily: boolean) => void;
 };
 
-const CategorySelectorModal = ({ isVisible, setModalVisible, setIsDaily }: CategorySelectorModalProps) => {
+const CategorySelectorModal = ({ isVisible, setModalVisible }: CategorySelectorModalProps) => {
   const dispatch = useAppDispatch();
   const categoryStrings = Object.keys(categoryMapping).map(
     (key) => key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()
   );
 
   const handleCategoryChange = (index: number) => {
-    setIsDaily(false);
+    dispatch(setDaily(false));
     dispatch(setCategory(index));
     setModalVisible(false);
   };
 
   const handleCategoryChangeDaily = (index: number) => {
-    setIsDaily(true);
+    dispatch(setDaily(true));
     dispatch(setCategory(index));
     setModalVisible(false);
   };

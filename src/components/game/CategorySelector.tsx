@@ -1,11 +1,7 @@
 import CategorySelectorModal from "../modal/CategorySelectorModal"
 import { useState } from "react";
 
-type CategorySelectorProps = {
-  setIsDaily: (isDaily: boolean) => void;
-};
-
-const CategorySelector = ({setIsDaily}: CategorySelectorProps) => {
+const CategorySelector = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -28,7 +24,6 @@ const CategorySelector = ({setIsDaily}: CategorySelectorProps) => {
       <CategorySelectorModal
         isVisible={modalVisible}
         setModalVisible={setModalVisible}
-        setIsDaily={setIsDaily}
       />
     </div>
   );
