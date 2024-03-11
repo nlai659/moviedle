@@ -11,7 +11,6 @@ import ReactConfetti from "react-confetti";
 import { useAppSelector } from "./components/redux/hooks";
 import { MediaData } from "./types/MediaData";
 import { fetchData } from "./services/dataFetching";
-import CategorySelectorModal from "./components/modal/CategorySelectorModal";
 import CategorySelector from "./components/game/CategorySelector";
 
 function App() {
