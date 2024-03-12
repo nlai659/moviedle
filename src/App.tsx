@@ -22,6 +22,7 @@ function App() {
   const [landingModalVisible, setLandingModalVisible] = useState(false);
   const [gameOverModalVisible, setGameOverModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [mediaData, setMediaData] = useState({} as MediaData);
   const [numHints, setNumHints] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -38,7 +39,11 @@ function App() {
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
     const mediaData = await fetchData(category, isDaily);
-    setMediaData(mediaData);
+    if (mediaData.title === "") {
+      setFetchError(true);
+    } else {
+      setMediaData(mediaData);
+    }
     setIsLoading(false);
   };
 
@@ -76,7 +81,6 @@ function App() {
       localStorage.setItem(lastDateVisitedKey, currentDate.toDateString());
     }
   };
-  
 
   const checkAnswer = (answer: string) => {
     if (numHints > NUM_HINTS) {
@@ -115,8 +119,11 @@ function App() {
   };
 
   const onRandomMovie = () => {
-    dispatch(setDaily(false))
     resetGame();
+    if (!daily) {
+      fetchAndSetData(category, false);
+    }
+    dispatch(setDaily(false))
   };
 
   const resetGame = () => {
@@ -125,6 +132,7 @@ function App() {
     setNumHints(0);
     setGameOverModalVisible(false);
     setShowConfetti(false);
+    setFetchError(false);
   };
 
   return (
@@ -153,12 +161,22 @@ function App() {
       <CategorySelectorHamburger/>
       </div>
       <div className="mx-auto min-w-screen-md max-w-screen-md flex-1">
-        {isLoading ? (
-          <LoadingSpinner />
-        ) : (
+        {isLoading && <LoadingSpinner />}
+        {fetchError && (
+          <div className="text-center text-white mt-8">
+            <h1>Failed to fetch data</h1>
+            <button
+              onClick={() => fetchAndSetData(category, daily)}
+              className="p-4 m-4 text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+        {!isLoading && !fetchError && (
           <HintArea
-            mediaData={mediaData}
-            numHints={numHints}
+          mediaData={mediaData}
+          numHints={numHints}
           />
         )}
       </div>
