@@ -16,7 +16,7 @@ const CategorySelectorModal = ({
       }`}
     >
       <div className="fixed inset-0 bg-black bg-opacity-50"></div>
-      <div className="bg-zinc-800 rounded-3xl shadow-md p-6 max-w-md min-w-md w-2/3 relative z-50 text-white">
+      <div className="bg-zinc-900 rounded-3xl shadow-md p-6 max-w-md min-w-md w-2/3 relative z-50 text-white">
         <div className="flex justify-end">
           <button
             onClick={() => setModalVisible(false)}

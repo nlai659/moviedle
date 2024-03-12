@@ -20,8 +20,8 @@ function App() {
   const NUM_HINTS = 5;
 
   const [landingModalVisible, setLandingModalVisible] = useState(false);
+  const [gameOverModalVisible, setGameOverModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [gameOver, setGameOver] = useState(false);
   const [mediaData, setMediaData] = useState({} as MediaData);
   const [numHints, setNumHints] = useState(0);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -45,48 +45,51 @@ function App() {
   // Configure Settings - daily, numHints, gameWon etc.
   const configureSettings = () => {
     if (!daily) return;
-
+  
     const currentDate = new Date();
-
-    // Visited Today
-    if (
-      localStorage.getItem(`lastDateVisited0`) ===
-      currentDate.toDateString()
-    ) {
+    const lastDateVisitedKey = `lastDateVisited`;
+    const gameOverDailyKey = `gameOverDaily${category}`;
+    const numHintsKey = `numHintsDaily${category}`;
+    const lastDateVisited = localStorage.getItem(lastDateVisitedKey);
+  
+    if (lastDateVisited === currentDate.toDateString()) {
       setLandingModalVisible(false);
-
-      // load previous game state
-      const gameWon = localStorage.getItem(`gameWonDaily${category}`);
-      const numHints = parseInt(
-        localStorage.getItem(`numHintsDaily${category}`) || "0"
-      );
-      if (gameWon === "true") {
-        setGameOver(true);
+  
+      const gameOver = localStorage.getItem(gameOverDailyKey);
+      const numHints = parseInt(localStorage.getItem(numHintsKey) || "0");
+  
+      if (gameOver === "true" && numHints <= NUM_HINTS) {
+        setGameOverModalVisible(true);
         setShowConfetti(true);
       }
+  
       setNumHints(numHints);
+  
       if (numHints > NUM_HINTS) {
-        setGameOver(true);
+        setGameOverModalVisible(true);
+        if (daily) {
+          localStorage.setItem(`gameOverDaily${category}`, "true");
+        }
       }
     } else {
-      // Hasn't Visited Today
       setLandingModalVisible(true);
-      localStorage.setItem(
-        `lastDateVisited${category}`,
-        currentDate.toDateString()
-      );
+      localStorage.setItem(lastDateVisitedKey, currentDate.toDateString());
     }
   };
+  
 
   const checkAnswer = (answer: string) => {
+    if (numHints > NUM_HINTS) {
+      setGameOverModalVisible(true);
+      return;
+    }
+
     // Correct Answer
     if (answer.toLowerCase() === mediaData.title.toLowerCase()) {
-      localStorage.setItem(`gameOver${category}`, "true");
-      setGameOver(true);
+      setGameOverModalVisible(true);
       setShowConfetti(true);
       if (daily) {
-        console.log("setting gameWonDaily");
-        localStorage.setItem(`gameWonDaily${category}`, "true");
+        localStorage.setItem(`gameOverDaily${category}`, "true");
       }
       return true;
     }
@@ -98,13 +101,14 @@ function App() {
           `numHintsDaily${category}`,
           (numHints + 1).toString()
         );
-        console.log(`numHintsDaily${category}`);
       }
 
       // Out of Hints
       if (numHints + 1 > NUM_HINTS) {
-        localStorage.setItem(`gameOver${category}`, "true");
-        setGameOver(true);
+        setGameOverModalVisible(true);
+        if (daily) {
+          localStorage.setItem(`gameOverDaily${category}`, "true");
+        }
       }
       return false;
     }
@@ -113,14 +117,13 @@ function App() {
   const onRandomMovie = () => {
     dispatch(setDaily(false))
     resetGame();
-    fetchAndSetData(category, false)
   };
 
   const resetGame = () => {
     setMediaData({} as MediaData);
     setIsLoading(true);
     setNumHints(0);
-    setGameOver(false);
+    setGameOverModalVisible(false);
     setShowConfetti(false);
   };
 
@@ -138,13 +141,11 @@ function App() {
 
       {/* Game Over Modal */}
       <GameOverModal
-        isVisible={gameOver}
+        isVisible={gameOverModalVisible}
+        setIsVisible={setGameOverModalVisible}
         isDaily={daily}
         onRandomMovie={onRandomMovie}
-        gameWin={numHints <= NUM_HINTS}
-        movieName={mediaData.title}
-        posterPath={mediaData.poster_path}
-        link={mediaData.link}
+        mediaData={mediaData}
       />
 
       <div className="flex flex-row justify-between">

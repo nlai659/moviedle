@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import { fetchMovieList, fetchTVList } from "../../services/apiTMDB";
 import { fetchAnimeList } from "../../services/apiMAL";
 import { fetchMangaSearch } from "../../services/apiJikan";
@@ -6,7 +6,7 @@ import {
   TMDB_suggestedMovieParser,
   TMDB_suggestedTVParser,
   MAL_suggestedAnimeParser,
-  MAL_suggestedMangaParser
+  MAL_suggestedMangaParser,
 } from "../../utils/dataparsers/suggestedMediaParser";
 import { SuggestedMediaData } from "../../types/SuggestedMediaData";
 import { useAppSelector } from "../redux/hooks";
@@ -19,12 +19,15 @@ type SearchBarProps = {
 const SearchBar = ({ checkAnswer }: SearchBarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [shake, setShake] = useState(false);
-  const [suggestedMediaList, setSuggestedMediaList] = useState<SuggestedMediaData[]>([]);
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState<number>(-1);
+  const [suggestedMediaList, setSuggestedMediaList] = useState<
+    SuggestedMediaData[]
+  >([]);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] =
+    useState<number>(-1);
 
   const category = useAppSelector((state) => state.category.category);
 
-  // Keyboard Navigation (For Suggestion List)
+  // Handles keyboard navigation for suggestions
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "ArrowUp") {
@@ -47,6 +50,32 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     };
   }, [suggestedMediaList]);
 
+  // Handles outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.closest(".relative")) return;
+      setSuggestedMediaList([]);
+    };
+
+    window.addEventListener("click", handleClickOutside);
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // Handles scrolling to the selected suggestion
+  const ref = createRef<HTMLDivElement>();
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [ref]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedSuggestionIndex !== -1) {
@@ -56,13 +85,13 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
       return;
     }
     if (searchTerm === "") return;
-    
+
     // Check Correct Answer
     const answer = checkAnswer(searchTerm);
     setSearchTerm("");
     setSuggestedMediaList([]);
     setSelectedSuggestionIndex(-1);
-    
+
     // Shake if incorrect
     if (!answer) {
       setShake(true);
@@ -90,17 +119,17 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
         break;
       case categoryMapping.TV:
         uniqueMedia = await fetchTVList(input).then((data) =>
-        TMDB_suggestedTVParser(data.results)
+          TMDB_suggestedTVParser(data.results)
         );
         break;
       case categoryMapping.ANIME:
         uniqueMedia = await fetchAnimeList(input).then((data) =>
-        MAL_suggestedAnimeParser(data)
+          MAL_suggestedAnimeParser(data)
         );
         break;
       case categoryMapping.MANGA:
         uniqueMedia = await fetchMangaSearch(input).then((data) =>
-        MAL_suggestedMangaParser(data.data)
+          MAL_suggestedMangaParser(data.data)
         );
         break;
       default:
@@ -139,6 +168,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
                     : "hover:bg-zinc-700"
                 }`}
                 onClick={() => handleSuggestionClick(media.title)}
+                ref={index === selectedSuggestionIndex ? ref : null}
               >
                 <span>{media.title}</span>
                 {media.img_path && (
@@ -187,9 +217,9 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
           >
             <path
               stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
               d="M1 5h12m0 0L9 1m4 4L9 9"
             />
           </svg>

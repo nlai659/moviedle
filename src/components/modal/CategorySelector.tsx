@@ -37,7 +37,7 @@ const CategorySelector = ({ setModalVisible }: CategorySelectorModalProps) => {
           <div>
             <button
               className={`mr-2 m-1 text-white px-4 py-2 rounded-full shadow-md hover:bg-zinc-800 bg-zinc-700 transition duration-300 ${
-                localStorage.getItem(`gameOver${index}`) === "true"
+                localStorage.getItem(`gameOverDaily${index}`) === "true"
                   ? "opacity-50"
                   : ""
               } ${category === index && daily ? "border border-zinc-400 drop-shadow-xl" : ""}`}
