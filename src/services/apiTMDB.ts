@@ -81,7 +81,7 @@ const fetchMovieList = async (query: string) => {
   return movieListResponse;
 };
 
-const fetchRandomTV = async (isDaily: boolean) => {
+const fetchRandomTV = async (isDaily: boolean, retry: number) => {
   let randomYear: number;
   let randomPage: number;
   let randomNumber: number;
@@ -95,7 +95,7 @@ const fetchRandomTV = async (isDaily: boolean) => {
     const year = currentDate.getFullYear();
   
     // Concatenate and parse into a single number
-    const singleNumberFromDate = parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`);
+    const singleNumberFromDate = parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`) + retry;
   
     randomYear = splitmix32(singleNumberFromDate, 1990, new Date().getFullYear());
     randomPage = splitmix32(singleNumberFromDate, 1, 3);

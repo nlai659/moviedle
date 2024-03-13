@@ -32,6 +32,8 @@ const fetchData = async (category: number, isDaily: boolean) => {
   let mediaDataResponse, creditDataResponse;
   let mediaDataParsed: MediaData = {castList: [], genres: [], title: "", synopsis: "", date: "", poster_path: ""};
 
+  let retryNumber = 0;
+
   try {
     switch (category) {
       case categoryMapping.MOVIE:
@@ -45,10 +47,11 @@ const fetchData = async (category: number, isDaily: boolean) => {
         break;
       case categoryMapping.TV:
         while (missingData(mediaDataParsed)) {
-          mediaDataResponse = await fetchRandomTV(isDaily);
+          mediaDataResponse = await fetchRandomTV(isDaily, retryNumber);
           creditDataResponse = await fetchTVCredits(mediaDataResponse.id);
   
           mediaDataParsed = TMDB_tvParser(mediaDataResponse, creditDataResponse);
+          retryNumber++;
         }
   
         break;
@@ -122,7 +125,7 @@ const fetchSuggestedData = async (category: number, searchTerm: string) => {
 
 // Condition for re-fetching data
 const missingData = (mediaData: MediaData) => {
-  if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList.length < 3) {
+  if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList === undefined || mediaData.castList.length < 3) {
     return true;
   }
   return false;
