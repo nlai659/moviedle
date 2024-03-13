@@ -2,7 +2,6 @@ import categoryMapping from "../../utils/mappings/categoryMapping";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setCategory } from "../redux/categorySlice";
 import { setDaily } from "../redux/dailySlice";
-import { useEffect } from "react";
 
 type CategorySelectorModalProps = {
   setModalVisible: (isVisible: boolean) => void;
