@@ -45,7 +45,7 @@ function App() {
     } else {
       mediaData = await fetch(`api/fetch-single?category=${category}&isDaily=${isDaily}`).then((res) => res.json());
     }
-    if (mediaData.title === "" || mediaData.castList === undefined) {
+    if (mediaData.title === "") {
       setFetchError(true);
     } else {
       setMediaData(mediaData);
@@ -83,6 +83,11 @@ function App() {
         }
       }
     } else {
+      for (let i = 0; i < Object.keys(categoryMapping).length; i++) {
+        localStorage.removeItem(`gameOverDaily${i}`);
+        localStorage.removeItem(`numHintsDaily${i}`);
+      }
+
       setLandingModalVisible(true);
       localStorage.setItem(lastDateVisitedKey, currentDate.toDateString());
     }
