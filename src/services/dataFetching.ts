@@ -1,4 +1,5 @@
 import { MediaData } from "../types/MediaData";
+import { SuggestedMediaData } from "../types/SuggestedMediaData";
 import {
   TMDB_movieParser,
   TMDB_tvParser,
@@ -10,17 +11,22 @@ import {
   fetchRandomAnime,
   fetchAnimeDetails,
   fetchAnimeCredits,
+  fetchAnimeList,
 } from "./apiMAL";
 import {
   fetchMovieCredits,
   fetchRandomMovie,
+  fetchMovieList,
   fetchRandomTV,
   fetchTVCredits,
+  fetchTVList,
 } from "./apiTMDB";
 import {
   fetchMangaCharacters,
   fetchRandomManga,
+  fetchMangaList,
 } from "./apiJikan"
+import { TMDB_suggestedMovieParser, TMDB_suggestedTVParser, MAL_suggestedAnimeParser, MAL_suggestedMangaParser } from "../utils/dataparsers/suggestedMediaParser";
 
 const fetchData = async (category: number, isDaily: boolean) => {
   let mediaDataResponse, creditDataResponse;
@@ -83,6 +89,37 @@ const fetchData = async (category: number, isDaily: boolean) => {
   }
 };
 
+const fetchSuggestedData = async (category: number, searchTerm: string) => {
+  let uniqueMedia: SuggestedMediaData[] = [];
+
+  switch (category) {
+    case categoryMapping.MOVIE:
+      uniqueMedia = await fetchMovieList(searchTerm).then((data) =>
+        TMDB_suggestedMovieParser(data.results)
+      );
+      break;
+    case categoryMapping.TV:
+      uniqueMedia = await fetchTVList(searchTerm).then((data) =>
+        TMDB_suggestedTVParser(data.results)
+      );
+      break;
+    case categoryMapping.ANIME:
+      uniqueMedia = await fetchAnimeList(searchTerm).then((data) =>
+        MAL_suggestedAnimeParser(data)
+      );
+      break;
+    case categoryMapping.MANGA:
+      uniqueMedia = await fetchMangaList(searchTerm).then((data) =>
+        MAL_suggestedMangaParser(data.data)
+      );
+      break;
+    default:
+      break;
+  }
+
+  return uniqueMedia;
+}
+
 // Condition for re-fetching data
 const missingData = (mediaData: MediaData) => {
   if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList.length < 3) {
@@ -91,4 +128,4 @@ const missingData = (mediaData: MediaData) => {
   return false;
 }
 
-export { fetchData };
+export { fetchData, fetchSuggestedData };

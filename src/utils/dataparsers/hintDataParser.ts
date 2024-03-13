@@ -43,9 +43,6 @@ const TMDB_movieParser = (movieData: any, creditData: any): MediaData => {
 }
 
 const TMDB_tvParser = (tvData: any, creditData: any): MediaData => {
-    console.log(tvData)
-    console.log(creditData)
-
     const castList: CastData[] = [];
 
     for (let i = 0; i < 3; i++) {

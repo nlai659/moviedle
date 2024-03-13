@@ -1,14 +1,6 @@
 import React, { useState, useEffect, createRef } from "react";
-import { fetchMovieList, fetchTVList } from "../../services/apiTMDB";
-import { fetchAnimeList } from "../../services/apiMAL";
-import { fetchMangaSearch } from "../../services/apiJikan";
-import {
-  TMDB_suggestedMovieParser,
-  TMDB_suggestedTVParser,
-  MAL_suggestedAnimeParser,
-  MAL_suggestedMangaParser,
-} from "../../utils/dataparsers/suggestedMediaParser";
 import { SuggestedMediaData } from "../../types/SuggestedMediaData";
+import { fetchSuggestedData } from "../../services/dataFetching";
 import { useAppSelector } from "../redux/hooks";
 import categoryMapping from "../../utils/mappings/categoryMapping";
 
@@ -110,32 +102,11 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
 
   const fetchAndSetSuggestedMediaList = async (input: string) => {
     let uniqueMedia: SuggestedMediaData[] = [];
-
-    switch (category) {
-      case categoryMapping.MOVIE:
-        uniqueMedia = await fetchMovieList(input).then((data) =>
-          TMDB_suggestedMovieParser(data.results)
-        );
-        break;
-      case categoryMapping.TV:
-        uniqueMedia = await fetchTVList(input).then((data) =>
-          TMDB_suggestedTVParser(data.results)
-        );
-        break;
-      case categoryMapping.ANIME:
-        uniqueMedia = await fetchAnimeList(input).then((data) =>
-          MAL_suggestedAnimeParser(data)
-        );
-        break;
-      case categoryMapping.MANGA:
-        uniqueMedia = await fetchMangaSearch(input).then((data) =>
-          MAL_suggestedMangaParser(data.data)
-        );
-        break;
-      default:
-        break;
+    if (category === categoryMapping.MANGA) {
+      uniqueMedia = await fetchSuggestedData(category, input);
+    } else {
+      uniqueMedia = await fetch(`api/fetch-suggested?category=${category}&input=${input}`).then((res) => res.json());
     }
-
     setSuggestedMediaList(uniqueMedia);
   };
 
