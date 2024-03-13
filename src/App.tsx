@@ -45,6 +45,7 @@ function App() {
     } else {
       mediaData = await fetch(`api/fetch-single?category=${category}&isDaily=${isDaily}`).then((res) => res.json());
     }
+    
     if (mediaData.title === "") {
       setFetchError(true);
     } else {
