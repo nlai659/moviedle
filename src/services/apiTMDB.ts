@@ -1,6 +1,11 @@
 import { getRandomNumber, getRandomYear, splitmix32 } from "../utils/random";
 
-const API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+let API_READ_ACCESS: any;
+if (typeof process !== "undefined") {
+  API_READ_ACCESS = process.env.VITE_TMDB_READ_ACCESS_TOKEN;
+} else {
+  API_READ_ACCESS = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+}
 const API_URL = "https://api.themoviedb.org/3/";
 const API_SEARCH_URL = "https://api.themoviedb.org/3/search/";
 

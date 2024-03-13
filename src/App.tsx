@@ -14,6 +14,7 @@ import { fetchData } from "./services/dataFetching";
 import CategorySelectorHamburger from "./components/game/CategorySelectorHamburger";
 import { useAppDispatch } from "./components/redux/hooks";
 import { setDaily } from "./components/redux/dailySlice";
+import categoryMapping from "./utils/mappings/categoryMapping";
 
 function App() {
   // Constants
@@ -38,8 +39,13 @@ function App() {
   }, [category, daily]);
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
-    const mediaData = await fetchData(category, isDaily);
-    if (mediaData.title === "") {
+    let mediaData: MediaData;
+    if (category === categoryMapping.MANGA) {
+      mediaData = await fetchData(category, isDaily);
+    } else {
+      mediaData = await fetch(`api/fetch-single?category=${category}&isDaily=${isDaily}`).then((res) => res.json());
+    }
+    if (mediaData.title === "" || mediaData.castList === undefined) {
       setFetchError(true);
     } else {
       setMediaData(mediaData);

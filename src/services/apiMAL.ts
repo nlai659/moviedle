@@ -1,7 +1,12 @@
 import { getRandomNumber, splitmix32 } from "../utils/random";
 
-const API_CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
-const CORS_PROXY = "/api/proxy?url=";
+let API_CLIENT_ID;
+if (typeof process !== "undefined") {
+  API_CLIENT_ID = process.env.VITE_MAL_CLIENT_ID;
+} else {
+  API_CLIENT_ID = import.meta.env.VITE_MAL_CLIENT_ID;
+}
+
 const API_URL = `https://api.myanimelist.net/v2/`;
 const API_SEARCH_URL =
   `https://myanimelist.net/search/prefix.json?type=`;
@@ -36,10 +41,8 @@ const fetchRandomAnime = async (isDaily: boolean) => {
     randomNumber = getRandomNumber(0, 499);
   }
 
-  const encodedApiUrl = encodeURIComponent(`${API_URL}anime/ranking?ranking_type=bypopularity&limit=1&offset=${randomNumber}`);
-
   const animeDataResponse = await fetch(
-    `${CORS_PROXY}${encodedApiUrl}`,
+    `${API_URL}anime/ranking?ranking_type=bypopularity&limit=1&offset=${randomNumber}`,
     options
   )
     .then((res) => res.json())
@@ -49,10 +52,8 @@ const fetchRandomAnime = async (isDaily: boolean) => {
 };
 
 const fetchAnimeDetails = async (id: number) => {
-  const encodedApiUrl = encodeURIComponent(`${API_URL}anime/${id}?fields=id,title,main_picture,alternative_titles,start_date,synopsis,genres,start_season,source,rating,pictures`);
-
   const animeDetailsResponse = await fetch(
-    `${CORS_PROXY}${encodedApiUrl}`,
+    `${API_URL}anime/${id}?fields=id,title,main_picture,alternative_titles,start_date,synopsis,genres,start_season,source,rating,pictures`,
     options
   ).then((res) => res.json());
 
@@ -60,10 +61,8 @@ const fetchAnimeDetails = async (id: number) => {
 }
 
 const fetchAnimeCredits = async (id: number) => {
-  const encodedApiUrl = encodeURIComponent(`${API_URL}anime/${id}/characters?fields=id,first_name,last_name,alternative_name,role,main_picture&limit=5`);
-
   const animeCreditsResponse = await fetch(
-    `${CORS_PROXY}${encodedApiUrl}`,
+    `${API_URL}anime/${id}/characters?fields=id,first_name,last_name,alternative_name,role,main_picture&limit=5`,
     options
   ).then((res) => res.json())
   .then((data) => data.data);
@@ -72,10 +71,8 @@ const fetchAnimeCredits = async (id: number) => {
 }
 
 const fetchAnimeList = async (input: string) => {
-  const encodedApiUrl = encodeURIComponent(`${API_SEARCH_URL}anime&keyword=${input}&v=1`);
-
   const animeListResponse = await fetch(
-    `${CORS_PROXY}${encodedApiUrl}`,
+    `${API_SEARCH_URL}anime&keyword=${input}&v=1`,
     options
   ).then((res) => res.json())
   .then((data) => data.categories[0].items);
