@@ -1,15 +1,10 @@
-# Moviedle (Name WIP)
+# Synopdle
 
-This is a project to guess movies based on a series of clues. With the main hint being the movie synopsis.
+This is a project to guess movies/tv/anime/manga based on a series of clues. With the main hint being the movie synopsis.
 
-## How to run
+[Synopdle.netlify.app](https://Synopdle.netlify.app/)
 
-1. Clone the repository
-2. Run `npm install`
-3. Run `npm run dev`
-4. Open your browser and go to `http://localhost:5173`
-
-![Moviedle](./src/assets/Screenshot_moviedle.png)
+![Synopdle](./src/assets/demo.png)
 
 ## How to play
 
@@ -19,11 +14,12 @@ This is a project to guess movies based on a series of clues. With the main hint
 6. If you guessed right, you will can play again with a new movie
 7. If you guessed wrong, you will can keep guessing until you get it right (with more hints)
 
-### Todos (WIP):
+## How to run
 
-- [ ] Add a timer
-- [ ] Add a score system (based on time and hints used)
-- [ ] Add infinite mode (keep guessing movies until you want to stop - with a score system)
+1. Clone the repository
+2. Run `npm install`
+3. Run `netlify dev`
+4. Open your browser and go to `http://localhost:8888`
 
 ## License
 
