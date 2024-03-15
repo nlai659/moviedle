@@ -15,6 +15,7 @@ import CategorySelectorHamburger from "./components/game/CategorySelectorHamburg
 import { useAppDispatch } from "./components/redux/hooks";
 import { setDaily } from "./components/redux/dailySlice";
 import categoryMapping from "./utils/mappings/categoryMapping";
+import YearRangeSlider from "./components/modal/YearRangeSlider";
 
 function App() {
   // Constants

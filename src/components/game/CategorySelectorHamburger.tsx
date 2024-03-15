@@ -1,4 +1,4 @@
-import CategorySelectorModal from "../modal/CategorySelectorModal"
+import SettingsModal from "../modal/SettingsModal"
 import { useState } from "react";
 
 const CategorySelectorHamburger = () => {
@@ -21,7 +21,7 @@ const CategorySelectorHamburger = () => {
           d="M4 6h16M4 12h16m-7 6h7"
         />
       </svg>
-      <CategorySelectorModal
+      <SettingsModal
         isVisible={modalVisible}
         setModalVisible={setModalVisible}
       />
