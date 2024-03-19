@@ -36,7 +36,7 @@ const CategorySelector = ({ setModalVisible }: CategorySelectorModalProps) => {
           <span className=" font-semibold text-lg">{categoryString}</span>
           <div>
             <button
-              className={`mr-2 m-1 text-white px-4 py-2 rounded-full shadow-md hover:bg-zinc-800 bg-zinc-700 transition duration-300 ${
+              className={`mr-2 m-1 text-white text-sm sm:text-base px-4 py-2 rounded-full shadow-md hover:bg-zinc-800 bg-zinc-700 transition duration-300 ${
                 localStorage.getItem(`gameOverDaily${index}`) === "true"
                   ? "opacity-50"
                   : ""
@@ -46,7 +46,7 @@ const CategorySelector = ({ setModalVisible }: CategorySelectorModalProps) => {
               Daily
             </button>
             <button
-              className={`m-1 text-white px-4 py-2 rounded-full shadow-md hover:bg-zinc-800 bg-zinc-700 transition duration-300 ${
+              className={`m-1 text-white text-sm sm:text-base px-4 py-2 rounded-full shadow-md hover:bg-zinc-800 bg-zinc-700 transition duration-300 ${
                 category === index && !daily ? "border border-zinc-400 drop-shadow-xl" : ""
               }`}
               onClick={() => handleCategoryChange(index)}
