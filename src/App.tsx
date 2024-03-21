@@ -39,14 +39,14 @@ function App() {
   }, [category, daily]);
 
   const fetchAndSetData = async (category: number, isDaily: boolean) => {
+    setIsLoading(true);
     let mediaData: MediaData;
     if (category === categoryMapping.MANGA) {
       mediaData = await fetchData(category, isDaily);
     } else {
       mediaData = await fetch(`api/fetch-single?category=${category}&isDaily=${isDaily}`).then((res) => res.json());
-    }
-    
-    if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList === undefined || mediaData.castList.length < 3) {
+    }    
+    if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList === undefined || mediaData.castList.length != 3) {
       setFetchError(true);
     } else {
       setMediaData(mediaData);

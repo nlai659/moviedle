@@ -27,8 +27,6 @@ const fetchRandomManga = async (isDaily: boolean, retryNumber: number) => {
       `${year}${month < 10 ? "0" : ""}${month}${day < 10 ? "0" : ""}${day}`
     );
 
-    console.log(retryNumber)
-
     randomPage = splitmix32(singleNumberFromDate, 1, 20) + retryNumber;
     randomNumber = splitmix32(singleNumberFromDate, 0, 24);
   } else {
