@@ -46,7 +46,7 @@ function App() {
       mediaData = await fetch(`api/fetch-single?category=${category}&isDaily=${isDaily}`).then((res) => res.json());
     }
     
-    if (mediaData.title === "") {
+    if (mediaData.title === "" || mediaData.synopsis === "" || mediaData.castList === undefined || mediaData.castList.length < 3) {
       setFetchError(true);
     } else {
       setMediaData(mediaData);

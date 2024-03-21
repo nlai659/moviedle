@@ -67,22 +67,16 @@ const fetchData = async (category: number, isDaily: boolean) => {
         break;
       case categoryMapping.MANGA:
         while (missingData(mediaDataParsed)) {
-          mediaDataResponse = await fetchRandomManga(isDaily);
+          mediaDataResponse = await fetchRandomManga(isDaily, retryNumber);
           creditDataResponse = await fetchMangaCharacters(mediaDataResponse.mal_id);
   
           mediaDataParsed = JIKAN_mangaParser(mediaDataResponse, creditDataResponse);
+          retryNumber++;
         }
   
         break;
   
-      default:
-        while(missingData(mediaDataParsed)) {
-          mediaDataResponse = await fetchRandomMovie(isDaily);
-          creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
-  
-          mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
-        }
-  
+      default:  
         break;
     }
     return mediaDataParsed;
