@@ -76,13 +76,7 @@ const fetchData = async (category: number, isDaily: boolean) => {
         break;
   
       default:
-        while(missingData(mediaDataParsed)) {
-          mediaDataResponse = await fetchRandomMovie(isDaily);
-          creditDataResponse = await fetchMovieCredits(mediaDataResponse.id);
-  
-          mediaDataParsed = TMDB_movieParser(mediaDataResponse, creditDataResponse);
-        }
-  
+        throw new Error("Invalid category");
         break;
     }
     return mediaDataParsed;
