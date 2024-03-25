@@ -38,7 +38,7 @@ const TMDB_movieParser = (movieData: any, creditData: any): MediaData => {
         genres: genres,
         date: movieData.release_date,
         castList: castList,
-        poster_path: `https://image.tmdb.org/t/p/w200${movieData.poster_path}`
+        poster_path: `https://image.tmdb.org/t/p/original${movieData.poster_path}`
     }
 }
 
@@ -68,7 +68,7 @@ const TMDB_tvParser = (tvData: any, creditData: any): MediaData => {
         genres: genres,
         date: tvData.first_air_date,
         castList: castList,
-        poster_path: `https://image.tmdb.org/t/p/w200${tvData.poster_path}`
+        poster_path: `https://image.tmdb.org/t/p/original${tvData.poster_path}`
     }
 }
 

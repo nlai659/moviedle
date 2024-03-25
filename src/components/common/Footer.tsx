@@ -1,6 +1,5 @@
-import React from 'react';
-import tmdbLogo from '../../assets/tmdb.svg';
-import malLogo from '../../assets/MyAnimeList.png';
+import tmdbLogo from "../../assets/tmdb.svg";
+import malLogo from "../../assets/MyAnimeList.png";
 
 const Footer: React.FC = () => {
   return (
@@ -10,18 +9,28 @@ const Footer: React.FC = () => {
           API provided by{" "}
           <a href="https://www.themoviedb.org/" className="underline">
             TMDB
-          </a>
-          {" "}and{" "}
+          </a>{" "}
+          and{" "}
           <a href="https://myanimelist.net/" className="underline">
             MAL
           </a>
         </p>
         <div className="flex justify-center">
-          <a href="https://www.themoviedb.org/">
-            <img src={tmdbLogo} alt="TMDB Logo" className="mt-1 h-4 w-auto" />
+          {/* TMDB Logo */}
+          <a href="https://www.themoviedb.org/" className="hidden sm:block">
+            <img
+              src={tmdbLogo}
+              alt="TMDB Logo"
+              className="mt-1 h-4 w-auto"
+            />
           </a>
-          <a href="https://myanimelist.net/">
-            <img src={malLogo} alt="MyAnimeList Logo" className="ml-4 h-5 mt-1 w-auto" />
+          {/* MyAnimeList Logo */}
+          <a href="https://myanimelist.net/" className="hidden sm:block ml-4">
+            <img
+              src={malLogo}
+              alt="MyAnimeList Logo"
+              className="mt-1 h-5 w-auto"
+            />
           </a>
         </div>
       </div>

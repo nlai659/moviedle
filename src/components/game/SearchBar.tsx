@@ -163,24 +163,24 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
           placeholder="Search..."
           value={searchTerm}
           onChange={(e) => onInputChange(e)}
-          className={`w-full p-4 bg-zinc-900 text-white rounded-3xl focus:outline-none focus:ring-zinc-500 focus:border-zinc-500 ${
+          className={`w-full p-4 bg-zinc-900 text-white placeholder:text-zinc-500 rounded-3xl focus:outline-none focus:ring-zinc-500 focus:border-zinc-500 ${
             shake ? "animate-shake" : ""
           }`}
         />
         <button
           type="submit"
-          className="p-4 w-5/6 mt-2 text-white bg-emerald-700 hover:bg-emerald-800 font-medium rounded-3xl text-sm transition duration-300"
+          className="p-4 flex-grow mt-2 text-white bg-emerald-700 hover:bg-emerald-800 font-medium rounded-3xl text-sm transition duration-300"
         >
           Submit
         </button>
         <button
           type="button"
           onClick={handleSkip}
-          className="inline-flex items-center justify-center p-4 mt-2 ml-2 flex-grow text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
+          className="inline-flex items-center justify-center p-4 mt-2 ml-2 w-1/6 text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
         >
           Skip
           <svg
-            className="w-3 h-3 ml-2"
+            className="w-3 h-3 ml-2 hidden sm:block"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
