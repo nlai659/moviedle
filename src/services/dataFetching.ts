@@ -67,10 +67,11 @@ const fetchData = async (category: number, isDaily: boolean) => {
         break;
       case categoryMapping.MANGA:
         while (missingData(mediaDataParsed)) {
-          mediaDataResponse = await fetchRandomManga(isDaily);
+          mediaDataResponse = await fetchRandomManga(isDaily, retryNumber);
           creditDataResponse = await fetchMangaCharacters(mediaDataResponse.mal_id);
   
           mediaDataParsed = JIKAN_mangaParser(mediaDataResponse, creditDataResponse);
+          retryNumber++;
         }
   
         break;

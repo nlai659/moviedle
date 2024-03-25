@@ -105,7 +105,7 @@ const SearchBar = ({ checkAnswer }: SearchBarProps) => {
     if (category === categoryMapping.MANGA) {
       uniqueMedia = await fetchSuggestedData(category, input);
     } else {
-      uniqueMedia = await fetch(`api/fetch-suggested?category=${category}&input=${input}`).then((res) => res.json());
+      uniqueMedia = await fetch(`api/fetch-list?category=${category}&searchTerm=${input}`).then((res) => res.json());
     }
     setSuggestedMediaList(uniqueMedia);
   };

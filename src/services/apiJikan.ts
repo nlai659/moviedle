@@ -11,7 +11,7 @@ const options = {
   },
 };
 
-const fetchRandomManga = async (isDaily: boolean) => {
+const fetchRandomManga = async (isDaily: boolean, retryNumber: number) => {
   let randomNumber: number, randomPage: number;
 
   if (isDaily) {
@@ -27,7 +27,7 @@ const fetchRandomManga = async (isDaily: boolean) => {
       `${year}${month < 10 ? "0" : ""}${month}${day < 10 ? "0" : ""}${day}`
     );
 
-    randomPage = splitmix32(singleNumberFromDate, 1, 20);
+    randomPage = splitmix32(singleNumberFromDate, 1, 20) + retryNumber;
     randomNumber = splitmix32(singleNumberFromDate, 0, 24);
   } else {
     randomPage = getRandomNumber(1, 20);
