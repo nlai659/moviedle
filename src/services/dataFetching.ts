@@ -76,7 +76,8 @@ const fetchData = async (category: number, isDaily: boolean) => {
   
         break;
   
-      default:  
+      default:
+        throw new Error("Invalid category");
         break;
     }
     return mediaDataParsed;

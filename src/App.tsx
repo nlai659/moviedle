@@ -147,6 +147,12 @@ function App() {
     setFetchError(false);
   };
 
+  const retryFetch = () => {
+    fetchAndSetData(category, daily);
+    setIsLoading(true);
+    setFetchError(false);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-zinc-900">
       {/* Confetti */}
@@ -178,9 +184,9 @@ function App() {
           <div className="text-center text-white mt-8">
             <h1>Failed to fetch data</h1>
             <button
-              onClick={() => fetchAndSetData(category, daily)}
+              onClick={retryFetch}
               className="p-4 m-4 text-white bg-zinc-800 hover:bg-zinc-900 font-medium rounded-3xl text-sm transition duration-300 border border-zinc-700"
-            >
+              >
               Try Again
             </button>
           </div>
